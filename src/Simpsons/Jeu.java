@@ -28,10 +28,46 @@ public class Jeu {
         this.avatar = new Avatar();
         this.boost = new Boost();
     }
+     public void detectCollision(BufferedImage personnage, BufferedImage bonus, int xP, int yP, int xB, int yB) {
+        // Obtenez les dimensions des images
+        int largeurPersonnage = personnage.getWidth();
+        int taillePersonnage = personnage.getHeight();
+        int largeurBonus = bonus.getWidth();
+        int tailleBonus = bonus.getHeight();
 
-    public void miseAJour() {
-        this.avatar.miseAJour();
+        // Vérifiez si les rectangles des images se chevauchent
+        if (xP < xB + largeurBonus
+                && xP + largeurPersonnage > xB
+                && yP < yB + tailleBonus
+                && yP + taillePersonnage > yB) {
+            System.out.println("boost !");
+            // Si les rectangles se chevauchent, vérifiez chaque pixel pour la collision
+//            for (int i = 0; i < taillePersonnage; i++) {
+//                for (int j = 0; j < largeurPersonnage; j++) {
+//                    int pixel1 = personnage.getRGB(j, i);
+//                    int pixel2 = bonus.getRGB(j + (xP - xB), i + (yP - yB));
+//                    if (((pixel1 & 0xFF000000) != 0x00) && ((pixel2 & 0xFF000000) != 0x00)) {
+                        // Collision détectée
+                        avatar.boost = true;
+                        
+//                    }
+                }
+            }
+//        }
+        // Pas de collision détectée
+//        avatar.boost = false;
+//    }
+//     }
+//throws IOException
+    public void miseAJour() throws IOException  {
+        this.avatar.miseAJour();         
         this.boost.miseAJour();
+        this.detectCollision(avatar.sprite, boost.sprite, avatar.x, avatar.y, boost.x, boost.y);
+        if(avatar.boost){
+                avatar.vitesse = 10;
+                boost.setSprite(ImageIO.read(getClass().getClassLoader().getResource("images/boost_bis.png")));
+        }
+//        Avatar.setVitesse(avatar);
 
     }
 

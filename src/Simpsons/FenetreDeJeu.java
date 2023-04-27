@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -50,7 +53,11 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     // Methode appelee par le timer et qui effectue la boucle de jeu
     @Override
     public void actionPerformed(ActionEvent e) {
-        this.jeu.miseAJour();
+        try {
+            this.jeu.miseAJour();
+        } catch (IOException ex) {
+            Logger.getLogger(FenetreDeJeu.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.jeu.rendu(contexte);
         this.jLabel1.repaint();
     }

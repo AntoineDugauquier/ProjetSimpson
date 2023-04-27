@@ -4,6 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
@@ -41,7 +44,11 @@ public class FenetreDeJeuGUI extends javax.swing.JFrame implements ActionListene
     // Methode appelee par le timer et qui effectue la boucle de jeu
     @Override
     public void actionPerformed(ActionEvent e) {
-        this.jeu.miseAJour();
+        try {
+            this.jeu.miseAJour();
+        } catch (IOException ex) {
+            Logger.getLogger(FenetreDeJeuGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.jeu.rendu(contexte);
         this.jLabel1.repaint();
     }

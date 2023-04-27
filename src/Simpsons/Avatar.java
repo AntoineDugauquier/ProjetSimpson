@@ -18,11 +18,11 @@ import javax.imageio.ImageIO;
  */
 public class Avatar {
 
-    private BufferedImage sprite;
+    public BufferedImage sprite;
     protected int x, y;
-    private boolean haut, bas, gauche, droite;
-    private double vitesse;
-    private boolean boost;
+    public boolean haut, bas, gauche, droite;
+    public double vitesse;
+    public boolean boost;
 
     public Avatar() {
         try {
@@ -30,9 +30,9 @@ public class Avatar {
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.x = 100;
-        this.y = 150;
-        this.vitesse = 5;
+        this.x = 96;
+        this.y = 160;
+        this.vitesse = 32;
         this.haut = false;
         this.bas = false;
         this.gauche = false;
@@ -75,39 +75,26 @@ public class Avatar {
         this.bas = bas;
     }
 
-    public void detectCollision(BufferedImage personnage, BufferedImage bonus, int xP, int yP, int xB, int yB) {
-        // Obtenez les dimensions des images
-        int width1 = personnage.getWidth();
-        int height1 = personnage.getHeight();
-        int width2 = bonus.getWidth();
-        int height2 = bonus.getHeight();
-
-        // Vérifiez si les rectangles des images se chevauchent
-        if (xP < xB + width2
-                && xP + width1 > xB
-                && yP < yB + height2
-                && yP + height1 > yB) {
-            // Si les rectangles se chevauchent, vérifiez chaque pixel pour la collision
-            for (int i = 0; i < height1; i++) {
-                for (int j = 0; j < width1; j++) {
-                    int pixel1 = personnage.getRGB(j, i);
-                    int pixel2 = bonus.getRGB(j + (xP - xB), i + (yP - yB));
-                    if (((pixel1 & 0xFF000000) != 0x00) && ((pixel2 & 0xFF000000) != 0x00)) {
-                        // Collision détectée
-                        boost = true;
-                        System.out.println("boost !");
-                    }
-                }
-            }
+    public void setVitesse(Avatar avatar) {
+        if (avatar.boost) {
+            avatar.vitesse = 10;
         }
-        // Pas de collision détectée
-//        boost = false;
     }
 
-    public void setVitesse(boolean boost) {
-        if (boost) {
-            vitesse = 10;
-        }
+    public BufferedImage getSprite() {
+        return sprite;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public double getVitesse() {
+        return vitesse;
     }
     
 
@@ -136,8 +123,7 @@ public class Avatar {
         if (y < 0) {
             y = 0;
         }
-//        this.detectCollision(sprite, sprite, x, y, Boost.getX(), y);
-//        this.setVitesse(boost);
+        
     }
 
     public void rendu(Graphics2D contexte) {

@@ -19,7 +19,8 @@ public class Boost {
 
     public BufferedImage sprite;
     public int x, y;
-    private int vitesse;
+    public int vitesse;
+    public boolean attrape;
 
     public Boost() {
         try {
@@ -30,70 +31,69 @@ public class Boost {
         this.x = 200;
         this.y = 250;
         this.vitesse = 15;
+        this.attrape = false;
     }
 
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj) {
-//            return true;
-//        }
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final Boost other = (Boost) obj;
-//        if (this.x != other.x) {
-//            return false;
-//        }
-//        return this.y == other.y;
-//    }
-//
-//    public BufferedImage getSprite() {
-//        return sprite;
-//    }
-//
-//    public void setSprite(BufferedImage sprite) {
-//        this.sprite = sprite;
-//    }
-//
-//    public int getX() {
-//        return x;
-//    }
-//
-//    public void setX(int x) {
-//        this.x = x;
-//    }
-//
-//    public int getY() {
-//        return y;
-//    }
-//
-//    public void setY(int y) {
-//        this.y = y;
-//    }
-//
-//    public int getVitesse() {
-//        return vitesse;
-//    }
-//
-//    public void setVitesse(int vitesse) {
-//        this.vitesse = vitesse;
-//    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Boost other = (Boost) obj;
+        if (this.x != other.x) {
+            return false;
+        }
+        return this.y == other.y;
+    }
+
+    public BufferedImage getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(BufferedImage sprite) {
+        this.sprite = sprite;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getVitesse() {
+        return vitesse;
+    }
+
+    public void setVitesse(int vitesse) {
+        this.vitesse = vitesse;
+    }
 
     public void miseAJour() {
-//        int minX = -5;
-//        int maxX = 5;
-//        x += (int) (Math.random() * (maxX - minX + 1)) + minX;
-//        int minY = -5;
-//        int maxY= 5;
-//        y += (int) (Math.random() * (maxY - minY + 1)) + minY;
-
-//        x = (int) (400 + 250 * Math.cos(System.currentTimeMillis() * 0.0005));
-//        y = (int) (275 + 125 * Math.sin(System.currentTimeMillis() * 0.0005));
+        x = (int) (400 + 250 * Math.cos(System.currentTimeMillis() * 0.0005));
+        y = (int) (275 + 125 * Math.sin(System.currentTimeMillis() * 0.0005));
     }
-
+public void desactive(boolean attrape){
+    //DESACTIVE LE BONUS SI ATTRAPE
+    if (attrape){
+        
+    }
+}
 
     public void rendu(Graphics2D contexte) {
         contexte.drawImage(this.sprite, (int) x, (int) y, null);
