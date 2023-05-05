@@ -68,7 +68,7 @@ public class Jeu {
 //throws IOException
 
     public void miseAJour() throws IOException {
-        this.avatar.miseAJour(avatar);
+        this.avatar.miseAJour();
         this.boost.miseAJour();
         this.boost2.miseAJour();
         this.detectCollision(avatar, boost);
