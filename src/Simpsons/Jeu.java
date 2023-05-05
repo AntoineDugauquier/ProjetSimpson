@@ -29,18 +29,18 @@ public class Jeu {
         this.avatar = new Avatar();
         this.boost = new Boost();
     }
-     public void detectCollision(BufferedImage personnage, BufferedImage bonus, int xP, int yP, int xB, int yB) {
+     public void detectCollision(Avatar avatar, Boost boost) {
         // Obtenez les dimensions des images
-        int largeurPersonnage = personnage.getWidth();
-        int taillePersonnage = personnage.getHeight();
-        int largeurBonus = bonus.getWidth();
-        int tailleBonus = bonus.getHeight();
+        int largeurPersonnage = avatar.sprite.getWidth();
+        int taillePersonnage = avatar.sprite.getHeight();
+        int largeurBonus = boost.sprite.getWidth();
+        int tailleBonus = boost.sprite.getHeight();
 
         // Vérifiez si les rectangles des images se chevauchent
-        if (xP < xB + largeurBonus
-                && xP + largeurPersonnage > xB
-                && yP < yB + tailleBonus
-                && yP + taillePersonnage > yB) {
+        if (avatar.x < boost.x + largeurBonus
+                && avatar.x + largeurPersonnage > boost.x
+                && avatar.y < boost.y + tailleBonus
+                && avatar.y + taillePersonnage > boost.y) {
             System.out.println("boost !");
             // Si les rectangles se chevauchent, vérifiez chaque pixel pour la collision
 //            for (int i = 0; i < taillePersonnage; i++) {
@@ -50,6 +50,7 @@ public class Jeu {
 //                    if (((pixel1 & 0xFF000000) != 0x00) && ((pixel2 & 0xFF000000) != 0x00)) {
                         // Collision détectée
                         avatar.boost = true;
+                        boost.attrape=true;
                         
 //                    }
                 }
@@ -61,13 +62,10 @@ public class Jeu {
 //     }
 //throws IOException
     public void miseAJour() throws IOException  {
-        this.avatar.miseAJour();         
-        this.boost.miseAJour();
-        this.detectCollision(avatar.sprite, boost.sprite, avatar.x, avatar.y, boost.x, boost.y);
-        if(avatar.boost){
-                avatar.vitesse = 10;
-                boost.setSprite(ImageIO.read(getClass().getClassLoader().getResource("images/boost_bis.png")));
-        }
+        this.avatar.miseAJour(avatar);         
+        this.boost.miseAJour(boost);
+        this.detectCollision(avatar , boost);        
+        
 //        Avatar.setVitesse(avatar);
 
     }
