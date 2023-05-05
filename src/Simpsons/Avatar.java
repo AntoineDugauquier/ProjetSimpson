@@ -124,7 +124,8 @@ public class Avatar {
             y = 0;
         }
         if(avatar.boost){
-            avatar.vitesse = 10;
+            avatar.vitesse += 10;
+            
         }
         
     }

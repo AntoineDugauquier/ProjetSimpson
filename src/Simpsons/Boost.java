@@ -21,8 +21,9 @@ public class Boost {
     public int x, y;
     public int vitesse;
     public boolean attrape;
+    public boolean sens;
 
-    public Boost() {
+    public Boost(boolean choixSens) {
         try {
             this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/donuts_bis.png"));
         } catch (IOException ex) {
@@ -32,6 +33,7 @@ public class Boost {
         this.y = 250;
         this.vitesse = 15;
         this.attrape = false;
+        this.sens = choixSens;
     }
 
     @Override
@@ -84,11 +86,19 @@ public class Boost {
         this.vitesse = vitesse;
     }
 
-    public void miseAJour(Boost boost) throws IOException {
-        x = (int) (25 * 32 - 250 * Math.cos(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 39);
-        y = (int) (15 * 32 + 250 * Math.sin(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 25);
-        if (boost.attrape) {
-            boost.setSprite(ImageIO.read(getClass().getClassLoader().getResource("images/boost_bis.png")));
+    public void miseAJour() throws IOException {
+        if (this.sens) {
+        
+            x = (int) (25 * 32 - 250 * Math.cos(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 39);
+            y = (int) (15 * 32 + 250 * Math.sin(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 25);
+        }
+        if (!this.sens) {
+            x = (int) (25 * 32 + 250 * Math.cos(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 39);
+            y = (int) (15 * 32 + 250 * Math.sin(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 25);
+        
+        }
+        if (this.attrape) {
+            this.setSprite(ImageIO.read(getClass().getClassLoader().getResource("images/boost_bis.png")));
 
         }
     }
