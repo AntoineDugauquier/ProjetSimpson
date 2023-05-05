@@ -85,8 +85,8 @@ public class Boost {
     }
 
     public void miseAJour() {
-        x = (int) (400 + 250 * Math.cos(System.currentTimeMillis() * 0.0005));
-        y = (int) (275 + 125 * Math.sin(System.currentTimeMillis() * 0.0005));
+        x = (int) (25*32 - 250 * Math.cos(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 39);
+        y = (int) (15*32 + 250 * Math.sin(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 25);
     }
 public void desactive(boolean attrape){
     //DESACTIVE LE BONUS SI ATTRAPE
