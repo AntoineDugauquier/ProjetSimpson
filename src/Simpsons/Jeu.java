@@ -14,17 +14,18 @@ import javax.imageio.ImageIO;
  * @author guillaume.laurent
  */
 public class Jeu {
-
-    private BufferedImage fond;
+    private Carte carte;
+    //private BufferedImage fond;
     public Avatar avatar;
     public Boost boost;
 
     public Jeu() {
-        try {
-            this.fond = ImageIO.read(getClass().getResource("../images/village.jpg"));
-        } catch (IOException ex) {
-            Logger.getLogger(Jeu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.carte = new Carte();
+//        try {
+//            this.fond = ImageIO.read(getClass().getResource("../images/village.jpg"));
+//        } catch (IOException ex) {
+//            Logger.getLogger(Jeu.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         this.avatar = new Avatar();
         this.boost = new Boost();
     }
@@ -72,7 +73,8 @@ public class Jeu {
     }
 
     public void rendu(Graphics2D contexte) {
-        contexte.drawImage(this.fond, 0, 0, null);
+        this.carte.rendu(contexte);
+        //contexte.drawImage(this.fond, 0, 0, null);
         this.avatar.rendu(contexte);
         this.boost.rendu(contexte);
     }
