@@ -98,7 +98,7 @@ public class Avatar {
     }
     
 
-    public void miseAJour() {
+    public void miseAJour(Avatar avatar) {
         if (this.gauche) {
             x -= vitesse;
         }
@@ -122,6 +122,9 @@ public class Avatar {
         }
         if (y < 0) {
             y = 0;
+        }
+        if(avatar.boost){
+            avatar.vitesse = 10;
         }
         
     }
