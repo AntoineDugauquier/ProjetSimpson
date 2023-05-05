@@ -84,16 +84,21 @@ public class Boost {
         this.vitesse = vitesse;
     }
 
-    public void miseAJour() {
-        x = (int) (25*32 - 250 * Math.cos(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 39);
-        y = (int) (15*32 + 250 * Math.sin(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 25);
+    public void miseAJour(Boost boost) throws IOException {
+        x = (int) (25 * 32 - 250 * Math.cos(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 39);
+        y = (int) (15 * 32 + 250 * Math.sin(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 25);
+        if (boost.attrape) {
+            boost.setSprite(ImageIO.read(getClass().getClassLoader().getResource("images/boost_bis.png")));
+
+        }
     }
-public void desactive(boolean attrape){
-    //DESACTIVE LE BONUS SI ATTRAPE
-    if (attrape){
-        
+
+    public void desactive(boolean attrape) {
+        //DESACTIVE LE BONUS SI ATTRAPE
+        if (attrape) {
+
+        }
     }
-}
 
     public void rendu(Graphics2D contexte) {
         contexte.drawImage(this.sprite, (int) x, (int) y, null);
