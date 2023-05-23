@@ -31,6 +31,8 @@ public class Jeu {
         this.avatar = new Avatar();
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
+        SoundPlayer sound = new SoundPlayer("simpson.mp3", false);
+        sound.play();
 
     }
 
@@ -56,7 +58,7 @@ public class Jeu {
             // Collision détectée
             if (!boost.attrape) {
                 System.out.println("boost !");
-                SoundPlayer sound = new SoundPlayer("victorySound.mp3", false);
+                SoundPlayer sound = new SoundPlayer("doh.mp3", false);
                 sound.stop();
                 sound.play();
                 boost.attrape = true;
