@@ -22,7 +22,8 @@ public class Avatar {
     protected int x, y;
     public boolean haut, bas, gauche, droite;
     public double vitesse;
-    public boolean boost;
+//    public boolean boost;
+    public int compteurBoost;
 
     public Avatar() {
         try {
@@ -32,11 +33,12 @@ public class Avatar {
         }
         this.x = 96;
         this.y = 160;
-        this.vitesse = 32;
+        this.vitesse = 16;
         this.haut = false;
         this.bas = false;
         this.gauche = false;
         this.droite = false;
+        this.compteurBoost = 0;
     }
 
     public void setGauche(boolean gauche) {
@@ -75,11 +77,6 @@ public class Avatar {
         this.bas = bas;
     }
 
-    public void setVitesse(Avatar avatar) {
-        if (avatar.boost) {
-            avatar.vitesse = 10;
-        }
-    }
 
     public BufferedImage getSprite() {
         return sprite;
@@ -123,8 +120,8 @@ public class Avatar {
         if (y < 0) {
             y = 0;
         }
-        if(this.boost){
-            this.vitesse += 1;
+        if(this.compteurBoost !=0){
+            this.vitesse = compteurBoost * 32 ;
             
         }
         

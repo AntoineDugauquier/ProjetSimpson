@@ -20,8 +20,12 @@ public class Boost {
     public BufferedImage sprite;
     public int x, y;
     public int vitesse;
+    public int largeurMin;
+    public int hauteurMin;
+    public int largeurMax;
+    public int hauteurMax;
     public boolean attrape;
-    public boolean sens;
+    public boolean sensRotation;
 
     public Boost(boolean choixSens) {
         try {
@@ -29,11 +33,15 @@ public class Boost {
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.x = 200;
-        this.y = 250;
+        this.x = 160;
+        this.y = 160;
         this.vitesse = 15;
+        this.largeurMin = 100;
+        this.hauteurMin = 100;
+        this.largeurMax = 1500;
+        this.hauteurMax = 900;
         this.attrape = false;
-        this.sens = choixSens;
+        this.sensRotation = choixSens;
     }
 
     @Override
@@ -87,15 +95,21 @@ public class Boost {
     }
 
     public void miseAJour() throws IOException {
-        if (this.sens) {
-        
+        if (this.sensRotation) {
+//            if ( this.x < this.largeurMax & this.x > this.largeurMin ) {
+//                this.x += this.vitesse;
+//            }
+//            if (this.x == this.largeurMax & this.y == this.hauteurMax) {
+//                this.x += this.vitesse;
+//            }
+
             x = (int) (25 * 32 - 250 * Math.cos(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 39);
             y = (int) (15 * 32 + 250 * Math.sin(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 25);
         }
-        if (!this.sens) {
+        if (!this.sensRotation) {
             x = (int) (25 * 32 + 250 * Math.cos(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 39);
             y = (int) (15 * 32 + 250 * Math.sin(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 25);
-        
+
         }
         if (this.attrape) {
             this.setSprite(ImageIO.read(getClass().getClassLoader().getResource("images/boost_bis.png")));

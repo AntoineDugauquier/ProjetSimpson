@@ -31,7 +31,7 @@ public class Jeu {
         this.avatar = new Avatar();
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
-        
+
     }
 
     public void detectCollision(Avatar avatar, Boost boost) {
@@ -46,7 +46,7 @@ public class Jeu {
                 && avatar.x + largeurPersonnage > boost.x
                 && avatar.y < boost.y + tailleBonus
                 && avatar.y + taillePersonnage > boost.y) {
-            System.out.println("boost !");
+            
             // Si les rectangles se chevauchent, vérifiez chaque pixel pour la collision
 //            for (int i = 0; i < taillePersonnage; i++) {
 //                for (int j = 0; j < largeurPersonnage; j++) {
@@ -54,8 +54,15 @@ public class Jeu {
 //                    int pixel2 = bonus.getRGB(j + (xP - xB), i + (yP - yB));
 //                    if (((pixel1 & 0xFF000000) != 0x00) && ((pixel2 & 0xFF000000) != 0x00)) {
             // Collision détectée
-            avatar.boost = true;
-            boost.attrape = true;
+            if (!boost.attrape) {
+                System.out.println("boost !");
+                SoundPlayer sound = new SoundPlayer("victorySound.mp3", false);
+                sound.stop();
+                sound.play();
+                boost.attrape = true;
+                avatar.compteurBoost++;
+                System.out.println(avatar.compteurBoost);
+            }
 
 //                    }
         }
