@@ -84,7 +84,7 @@ public class Jeu {
         this.detectCollision(avatar, boost);
         this.detectCollision(avatar, boost2);
         if(avatar.compteurBoost ==2){
-            musiqueFond.stop();
+//            musiqueFond.stop();
         }
 
 //        Avatar.setVitesse(avatar);
