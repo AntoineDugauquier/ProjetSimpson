@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -20,6 +21,7 @@ public class Jeu {
     public Avatar avatar;
     public Boost boost;
     public Boost boost2;
+    ArrayList <Boost> listeBoost = new ArrayList();
     public SoundPlayer musiqueFond;
     public SoundPlayer musiqueBoost;
 
@@ -33,6 +35,8 @@ public class Jeu {
         this.avatar = new Avatar();
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
+        this.listeBoost.add(boost);
+        this.listeBoost.add(boost2);
         musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
         musiqueFond.play();
         musiqueBoost = new SoundPlayer("doh.mp3", false);
@@ -86,10 +90,17 @@ public class Jeu {
 
     public void miseAJour() throws IOException {
         this.avatar.miseAJour();
-        this.boost.miseAJour();
-        this.boost2.miseAJour();
-        this.detectCollision(avatar, boost);
-        this.detectCollision(avatar, boost2);
+        for(int i = 0 ; i < listeBoost.size(); i++){
+            listeBoost.get(i).miseAJour();
+            this.detectCollision(avatar,  listeBoost.get(i));
+            if (listeBoost.get(i).attrape){
+                listeBoost.remove(i);
+            }
+        }
+//        this.boost.miseAJour();
+//        this.boost2.miseAJour();
+//        this.detectCollision(avatar, boost);
+//        this.detectCollision(avatar, boost2);
 
 //        Avatar.setVitesse(avatar);
     }
@@ -98,8 +109,11 @@ public class Jeu {
         this.carte.rendu(contexte);
         //contexte.drawImage(this.fond, 0, 0, null);
         this.avatar.rendu(contexte);
-        this.boost.rendu(contexte);
-        this.boost2.rendu(contexte);
+        for(int i = 0 ; i < listeBoost.size(); i++){
+            listeBoost.get(i).rendu(contexte);
+//        this.boost.rendu(contexte);
+//        this.boost2.rendu(contexte);
     }
 
+}
 }
