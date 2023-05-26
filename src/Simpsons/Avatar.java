@@ -27,13 +27,15 @@ public class Avatar {
 
     public Avatar() {
         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite.png"));
+//            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite.png"));
+this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
+
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.x = 96;
         this.y = 160;
-        this.vitesse = 16;
+        this.vitesse = 32;
         this.haut = false;
         this.bas = false;
         this.gauche = false;
@@ -52,7 +54,8 @@ public class Avatar {
 
     public void setDroite(boolean droite) {
         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite_tiers.png"));
+//            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite_tiers.png"));
+this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }

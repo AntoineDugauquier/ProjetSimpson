@@ -96,13 +96,6 @@ public class Boost {
 
     public void miseAJour() throws IOException {
         if (this.sensRotation) {
-//            if ( this.x < this.largeurMax & this.x > this.largeurMin ) {
-//                this.x += this.vitesse;
-//            }
-//            if (this.x == this.largeurMax & this.y == this.hauteurMax) {
-//                this.x += this.vitesse;
-//            }
-
             x = (int) (25 * 32 - 250 * Math.cos(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 39);
             y = (int) (15 * 32 + 250 * Math.sin(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 25);
         }
@@ -119,7 +112,7 @@ public class Boost {
 
     public void desactive() {
         if (this.attrape) {
-
+            
         }
     }
 
