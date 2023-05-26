@@ -20,6 +20,7 @@ public class Jeu {
     public Avatar avatar;
     public Boost boost;
     public Boost boost2;
+    public SoundPlayer musiqueFond;
 
     public Jeu() {
         this.carte = new Carte();
@@ -31,8 +32,8 @@ public class Jeu {
         this.avatar = new Avatar();
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
-        SoundPlayer sound = new SoundPlayer("simpson.mp3", false);
-        sound.play();
+        musiqueFond = new SoundPlayer("simpson.mp3", false);
+        musiqueFond.play();
 
     }
 
@@ -82,6 +83,9 @@ public class Jeu {
         this.boost2.miseAJour();
         this.detectCollision(avatar, boost);
         this.detectCollision(avatar, boost2);
+        if(avatar.compteurBoost ==2){
+            musiqueFond.stop();
+        }
 
 //        Avatar.setVitesse(avatar);
     }

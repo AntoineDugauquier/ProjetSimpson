@@ -117,9 +117,8 @@ public class Boost {
         }
     }
 
-    public void desactive(boolean attrape) {
-        //DESACTIVE LE BONUS SI ATTRAPE
-        if (attrape) {
+    public void desactive() {
+        if (this.attrape) {
 
         }
     }
