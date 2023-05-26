@@ -33,7 +33,7 @@ public class Jeu {
         this.avatar = new Avatar();
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
-        musiqueFond = new SoundPlayer("simpson.mp3", true);
+        musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
         musiqueFond.play();
         musiqueBoost = new SoundPlayer("doh.mp3", false);
 
