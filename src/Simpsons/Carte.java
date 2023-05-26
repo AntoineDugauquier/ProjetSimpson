@@ -9,6 +9,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -217,6 +220,17 @@ public class Carte {
         
         
         
+    }
+    
+    public boolean accessible (int x, int y){
+        List <Integer> listeNumAccessible = Arrays.asList(0,16,17,18,19,20,21,22);
+        
+        int valeur = decor[y][x];
+        
+        if (listeNumAccessible.contains(valeur)){
+            return true;
+        }
+        return false;
     }
 
 }

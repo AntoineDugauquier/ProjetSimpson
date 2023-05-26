@@ -22,6 +22,7 @@ public class Jeu {
     public Boost boost2;
     public SoundPlayer musiqueFond;
     public SoundPlayer musiqueBoost;
+    public boolean demHaut, demBas, demGauche, demDroite;
 
     public Jeu() {
         this.carte = new Carte();
@@ -85,7 +86,49 @@ public class Jeu {
 //throws IOException
 
     public void miseAJour() throws IOException {
+        
+        
+        if (!this.demHaut && !this.demBas) {
+            if (this.demGauche && !this.demDroite) {
+                //direction demandée = gauche
+                if (carte.accessible(avatar.coordx-1, avatar.coordy)){
+                    avatar.setGauche(true);
+                    
+                }
+            }
+            if (!this.demGauche && this.demDroite) {
+                //direction demandée = droite
+                if (carte.accessible(avatar.coordx+1, avatar.coordy)){
+                    avatar.setDroite(true);
+                }
+            }
+        }
+        
+        if(!this.demGauche && !this.demDroite) {
+            if (this.demHaut && !this.demBas) {
+                //direction demandée = haut
+                if (carte.accessible(avatar.coordx, avatar.coordy-1)){
+                    avatar.setHaut(true);
+                    
+                }
+            }
+            if (!this.demHaut && this.demBas) {
+                //direction demandée = bas
+                if (carte.accessible(avatar.coordx, avatar.coordy+1)){
+                    avatar.setBas(true);
+                }
+            }
+        }   
+        
         this.avatar.miseAJour();
+        avatar.setGauche(false);
+        avatar.setDroite(false);
+        avatar.setHaut(false);
+        avatar.setBas(false);
+        
+        
+        
+        
         this.boost.miseAJour();
         this.boost2.miseAJour();
         this.detectCollision(avatar, boost);
@@ -100,6 +143,22 @@ public class Jeu {
         this.avatar.rendu(contexte);
         this.boost.rendu(contexte);
         this.boost2.rendu(contexte);
+    }
+
+    void setdemDroite(boolean b) {
+        this.demDroite=b ;
+    }
+
+    void setdemGauche(boolean b) {
+        this.demGauche=b ;
+    }
+
+    void setdemHaut(boolean b) {
+        this.demHaut=b ;
+    }
+
+    void setdemBas(boolean b) {
+        this.demBas=b ;
     }
 
 }
