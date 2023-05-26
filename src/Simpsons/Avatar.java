@@ -24,17 +24,19 @@ public class Avatar {
     public double vitesse;
 //    public boolean boost;
     public int compteurBoost;
+    public boolean porteObjet;
 
-    public Avatar() {
+
+    public Avatar(String sprite,int x,int y) {
         try {
 //            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite.png"));
-this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
+this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/"+sprite));
 
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.x = 96;
-        this.y = 160;
+        this.x = x;
+        this.y = y;
         this.vitesse = 32;
         this.haut = false;
         this.bas = false;
@@ -44,39 +46,38 @@ this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Tahit
     }
 
     public void setGauche(boolean gauche) {
-        try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_gauche_tiers.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+////            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
+//        } catch (IOException ex) {
+//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         this.gauche = gauche;
     }
 
     public void setDroite(boolean droite) {
-        try {
-//            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite_tiers.png"));
-this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+////this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
+//        } catch (IOException ex) {
+//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         this.droite = droite;
     }
 
     public void setHaut(boolean haut) {
-        try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_haut.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+////            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
+//        } catch (IOException ex) {
+//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         this.haut = haut;
     }
 
     public void setBas(boolean bas) {
-        try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
+//        } catch (IOException ex) {
+//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         this.bas = bas;
     }
 

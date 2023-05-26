@@ -25,14 +25,16 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     private JLabel jLabel1;
     private Jeu jeu;
     private Timer timer;
+    private JLabel score;
 
     public FenetreDeJeu() {
         // initialisation de la fenetre
         this.setSize(1600,960);
+        this.setTitle("Simpson Partie");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addKeyListener(this);
-        this.jLabel1 = new JLabel();
+        this.jLabel1 = new JLabel();        
         this.jLabel1.setPreferredSize(new java.awt.Dimension(1600,960));
         this.setContentPane(this.jLabel1);
         this.pack();
@@ -46,7 +48,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         this.contexte = this.framebuffer.createGraphics();
 
         // Creation du Timer qui appelle this.actionPerformed() tous les 40 ms
-        this.timer = new Timer(500, this);
+        this.timer = new Timer(100, this);
         this.timer.start();
     }
 
