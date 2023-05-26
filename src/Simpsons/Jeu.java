@@ -21,6 +21,7 @@ public class Jeu {
     public Boost boost;
     public Boost boost2;
     public SoundPlayer musiqueFond;
+    public SoundPlayer musiqueBoost;
 
     public Jeu() {
         this.carte = new Carte();
@@ -32,8 +33,9 @@ public class Jeu {
         this.avatar = new Avatar();
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
-        musiqueFond = new SoundPlayer("simpson.mp3", false);
+        musiqueFond = new SoundPlayer("simpson.mp3", true);
         musiqueFond.play();
+        musiqueBoost = new SoundPlayer("doh.mp3", false);
 
     }
 
@@ -49,7 +51,7 @@ public class Jeu {
                 && avatar.x + largeurPersonnage > boost.x
                 && avatar.y < boost.y + tailleBonus
                 && avatar.y + taillePersonnage > boost.y) {
-            
+
             // Si les rectangles se chevauchent, vérifiez chaque pixel pour la collision
 //            for (int i = 0; i < taillePersonnage; i++) {
 //                for (int j = 0; j < largeurPersonnage; j++) {
@@ -65,6 +67,11 @@ public class Jeu {
                 boost.attrape = true;
                 avatar.compteurBoost++;
                 System.out.println(avatar.compteurBoost);
+                if (avatar.compteurBoost == 2) {
+                    musiqueFond.stop();
+                    musiqueFond.setName("victorySound.mp3");
+                    musiqueFond.play();
+                }
             }
 
 //                    }
@@ -83,9 +90,6 @@ public class Jeu {
         this.boost2.miseAJour();
         this.detectCollision(avatar, boost);
         this.detectCollision(avatar, boost2);
-        if(avatar.compteurBoost ==2){
-//            musiqueFond.stop();
-        }
 
 //        Avatar.setVitesse(avatar);
     }

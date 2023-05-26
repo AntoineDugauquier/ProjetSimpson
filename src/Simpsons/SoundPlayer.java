@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
-
 public class SoundPlayer {
 
     private InputStream inputStream;
@@ -16,8 +15,8 @@ public class SoundPlayer {
     private boolean repeat, paused;
     private long pauseLocation, totalSongLength;
     private String name;
-    
-    public SoundPlayer(String name, boolean repeat){
+
+    public SoundPlayer(String name, boolean repeat) {
         this.name = name;
         this.repeat = repeat;
     }
@@ -26,8 +25,8 @@ public class SoundPlayer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void play(){
-        inputStream = this.getClass().getResourceAsStream("/resources/"+name);
+    public void play() {
+        inputStream = this.getClass().getResourceAsStream("/resources/" + name);
 //        System.out.println("Hello :" + inputStream);
         try {
             totalSongLength = inputStream.available();
@@ -39,7 +38,7 @@ public class SoundPlayer {
         } catch (JavaLayerException ex) {
             Logger.getLogger(SoundPlayer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         new Thread() {
             @Override
             public void run() {
@@ -50,16 +49,16 @@ public class SoundPlayer {
                         play();
                     }
                 } catch (JavaLayerException ex) {
-                    System.err.println("There was an error to play /resources/"+name);
+                    System.err.println("There was an error to play /resources/" + name);
                 }
             }
         }.start();
     }
 
-    public void resume(){
+    public void resume() {
         try {
             paused = false;
-            inputStream = this.getClass().getResourceAsStream("/resources/"+name);
+            inputStream = this.getClass().getResourceAsStream("/resources/" + name);
             try {
                 inputStream.skip(totalSongLength - pauseLocation);
             } catch (IOException ex) {
@@ -72,7 +71,7 @@ public class SoundPlayer {
                     try {
                         player.play();
                     } catch (JavaLayerException ex) {
-                        System.err.println("There was an error to resume " + "/resources/"+name);
+                        System.err.println("There was an error to resume " + "/resources/" + name);
                     }
                 }
             }.start();
@@ -101,6 +100,10 @@ public class SoundPlayer {
                 System.out.println("Error when song is paused");
             }
         }
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isRepeat() {
