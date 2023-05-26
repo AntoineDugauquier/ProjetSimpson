@@ -27,11 +27,6 @@ public class Jeu {
 
     public Jeu() {
         this.carte = new Carte();
-//        try {
-//            this.fond = ImageIO.read(getClass().getResource("../images/village.jpg"));
-//        } catch (IOException ex) {
-//            Logger.getLogger(Jeu.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         this.avatar = new Avatar();
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
@@ -55,13 +50,6 @@ public class Jeu {
                 && avatar.x + largeurPersonnage > boost.x
                 && avatar.y < boost.y + tailleBonus
                 && avatar.y + taillePersonnage > boost.y) {
-
-            // Si les rectangles se chevauchent, vérifiez chaque pixel pour la collision
-//            for (int i = 0; i < taillePersonnage; i++) {
-//                for (int j = 0; j < largeurPersonnage; j++) {
-//                    int pixel1 = personnage.getRGB(j, i);
-//                    int pixel2 = bonus.getRGB(j + (xP - xB), i + (yP - yB));
-//                    if (((pixel1 & 0xFF000000) != 0x00) && ((pixel2 & 0xFF000000) != 0x00)) {
             // Collision détectée
             if (!boost.attrape) {
                 System.out.println("boost !");
@@ -77,16 +65,9 @@ public class Jeu {
                     musiqueFond.play();
                 }
             }
-
-//                    }
         }
     }
-//        }
-    // Pas de collision détectée
-//        avatar.boost = false;
-//    }
-//     }
-//throws IOException
+
 
     public void miseAJour() throws IOException {
         this.avatar.miseAJour();
@@ -96,23 +77,15 @@ public class Jeu {
             if (listeBoost.get(i).attrape){
                 listeBoost.remove(i);
             }
-        }
-//        this.boost.miseAJour();
-//        this.boost2.miseAJour();
-//        this.detectCollision(avatar, boost);
-//        this.detectCollision(avatar, boost2);
-
-//        Avatar.setVitesse(avatar);
+        }        
     }
 
     public void rendu(Graphics2D contexte) {
         this.carte.rendu(contexte);
-        //contexte.drawImage(this.fond, 0, 0, null);
         this.avatar.rendu(contexte);
         for(int i = 0 ; i < listeBoost.size(); i++){
             listeBoost.get(i).rendu(contexte);
-//        this.boost.rendu(contexte);
-//        this.boost2.rendu(contexte);
+
     }
 
 }
