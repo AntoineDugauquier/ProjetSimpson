@@ -24,26 +24,31 @@ public class Avatar {
     public double vitesse;
 //    public boolean boost;
     public int compteurBoost;
+    public int coordx, coordy;
 
     public Avatar() {
         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite.png"));
+            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Homer.png"));
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.x = 96;
-        this.y = 160;
+         
         this.vitesse = 16;
         this.haut = false;
         this.bas = false;
         this.gauche = false;
         this.droite = false;
         this.compteurBoost = 0;
+        this.coordx = 2;
+        this.coordy = 0;
+        this.x = coordx*32+9; 
+        this.y = coordy*32+8;
+        
     }
 
     public void setGauche(boolean gauche) {
         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_gauche_tiers.png"));
+            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Homer.png"));
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -52,7 +57,7 @@ public class Avatar {
 
     public void setDroite(boolean droite) {
         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite_tiers.png"));
+            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Homer.png"));
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -61,7 +66,7 @@ public class Avatar {
 
     public void setHaut(boolean haut) {
         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_haut.png"));
+            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Homer.png"));
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -70,7 +75,7 @@ public class Avatar {
 
     public void setBas(boolean bas) {
         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite.png"));
+            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Homer.png"));
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -96,29 +101,39 @@ public class Avatar {
     
 
     public void miseAJour() {
-        if (this.gauche) {
-            x -= vitesse;
+        if (!this.haut && !this.bas) {
+            if (this.gauche) {
+                coordx-=1;
+                x = coordx*32+9;
+            }
+            if (this.droite) {
+                coordx+=1;
+                x = coordx*32+9;
+            }
         }
-        if (this.droite) {
-            x += vitesse;
+        
+        if(!this.droite && !this.gauche) {
+            if (this.haut) {
+                coordy-=1;
+                y = coordy*32+8;
+            }
+            if (this.bas) {
+                coordy+=1;
+                y = coordy*32+8;
+            }
+        }    
+            
+        if (coordx > 50-2) {
+            coordx = 50-2;
         }
-        if (this.haut) {
-            y -= vitesse;
+        if (coordx < 0+1) {
+            coordx = 0+1;
         }
-        if (this.bas) {
-            y += vitesse;
+        if (coordy > 30-2) {
+            coordy = 30-2;
         }
-        if (x > 50*32 - 64) {
-            x = 50*32 - 64;
-        }
-        if (x < 0) {
-            x = 0;
-        }
-        if (y > 30*32 - 128) {
-            y = 30*32 - 128;
-        }
-        if (y < 0) {
-            y = 0;
+        if (coordy < 0+1) {
+            coordy = 0+1;
         }
         if(this.compteurBoost !=0){
             this.vitesse = compteurBoost * 32 ;
