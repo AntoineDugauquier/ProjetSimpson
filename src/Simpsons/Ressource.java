@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import java.util.Random;
 
 /**
  *
@@ -33,8 +34,9 @@ public class Ressource {
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.x = 640;
-        this.y = 640;
+        Random random = new Random();
+        this.x=random.nextInt(1200 - 250 + 1) + 250;         
+        this.y = random.nextInt(750 - 250 + 1) + 250;
         this.vitesse = 15;
         this.largeurMin = 100;
         this.hauteurMin = 100;
