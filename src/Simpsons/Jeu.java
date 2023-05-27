@@ -33,8 +33,8 @@ public class Jeu {
             for (int j = 0; j < 960; j += 32) {
             }
         }
-        this.avatar = new Avatar("Homer.png", 64, 160);
-        this.avatar2 = new Avatar("Bart.png", 1600 - 64, 160);
+        this.avatar = new Avatar("Homer.png");
+        this.avatar2 = new Avatar("Bart.png");
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
         this.ressource = new Ressource();

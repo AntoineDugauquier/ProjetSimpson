@@ -34,8 +34,8 @@ public class Ressource {
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.x = 32 * (random.nextInt(28 - 23) + 23) + 4;
-        this.y = 32 * (random.nextInt(18 - 13) + 13) + 4;
+        this.x = 32 * (random.nextInt(28 - 22) + 22) + 4;
+        this.y = 32 * (random.nextInt(18 - 12) + 12) + 4;
         this.vitesse = 15;
         this.largeurMin = 100;
         this.hauteurMin = 100;

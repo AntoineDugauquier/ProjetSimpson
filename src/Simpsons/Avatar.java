@@ -28,7 +28,7 @@ public class Avatar {
     public boolean porteObjet;
 
 
-    public Avatar(String sprite,int x,int y) {
+    public Avatar(String sprite) {
         try {
 //            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite.png"));
 this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/"+sprite));
