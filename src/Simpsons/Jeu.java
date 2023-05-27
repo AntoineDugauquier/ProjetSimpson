@@ -92,18 +92,18 @@ public class Jeu {
                 && avatar.y < ressource.y + tailleBonus
                 && avatar.y + taillePersonnage > ressource.y) {
             // Collision détectée
-            if (!ressource.attrape) {
-                System.out.println("boost !");
+            if (!avatar.porteObjet) {
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
                 sound.play();
                 ressource.attrape = true;
-                System.out.println(avatar.compteurBoost);
+                avatar.porteObjet=true;
+                System.out.println( "A attrape un objet");
                 if (avatar.compteurBoost == 2) {
                     musiqueFond.stop();
                     musiqueFond.setName("victorySound.mp3");
                     musiqueFond.play();
                 }
-            }
+            }            
         }
     }
 
@@ -186,8 +186,7 @@ public class Jeu {
 
     public void rendu(Graphics2D contexte) {
         this.carte.rendu(contexte);
-        this.avatar.rendu(contexte);
-        this.avatar2.rendu(contexte);
+        
 
         for (int i = 0; i < listeRessource.size(); i++) {
             listeRessource.get(i).rendu(contexte);
@@ -197,6 +196,7 @@ public class Jeu {
             listeBoost.get(i).rendu(contexte);
 
         }
-
+        this.avatar.rendu(contexte);
+        this.avatar2.rendu(contexte);
     }
 }
