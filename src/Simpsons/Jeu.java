@@ -18,19 +18,19 @@ public class Jeu {
 
     private Carte carte;
     //private BufferedImage fond;
-    public Avatar avatar,avatar2;
-    public Boost boost,boost2;
+    public Avatar avatar, avatar2;
+    public Boost boost, boost2;
     public Ressource ressource, ressource2;
     ArrayList<Boost> listeBoost = new ArrayList();
-    ArrayList<Boost> listeRessource = new ArrayList();
+    ArrayList<Ressource> listeRessource = new ArrayList();
     public SoundPlayer musiqueFond;
     public SoundPlayer musiqueBoost;
     public boolean demHaut, demBas, demGauche, demDroite;
 
     public Jeu() {
         this.carte = new Carte();
-        for (int i =0;i<=1600; i+=32){
-            for (int j=0;j<960; j+=32){
+        for (int i = 0; i <= 1600; i += 32) {
+            for (int j = 0; j < 960; j += 32) {
             }
         }
         this.avatar = new Avatar("Homer.png", 64, 160);
@@ -39,7 +39,8 @@ public class Jeu {
         this.boost2 = new Boost(false);
         this.ressource = new Ressource();
         this.ressource2 = new Ressource();
-
+        this.listeRessource.add(ressource);
+        this.listeRessource.add(ressource2);
         this.listeBoost.add(boost);
         this.listeBoost.add(boost2);
         musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
@@ -94,7 +95,6 @@ public class Jeu {
             if (!ressource.attrape) {
                 System.out.println("boost !");
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
-                sound.stop();
                 sound.play();
                 ressource.attrape = true;
                 System.out.println(avatar.compteurBoost);
@@ -108,44 +108,52 @@ public class Jeu {
     }
 
     public void miseAJour() throws IOException {
-        
-        
+
         if (!this.demHaut && !this.demBas) {
             if (this.demGauche && !this.demDroite) {
                 //direction demandée = gauche
-                if (carte.accessible(avatar.coordx-1, avatar.coordy)){
+                if (carte.accessible(avatar.coordx - 1, avatar.coordy)) {
                     avatar.setGauche(true);
-                    
+
                 }
             }
             if (!this.demGauche && this.demDroite) {
                 //direction demandée = droite
-                if (carte.accessible(avatar.coordx+1, avatar.coordy)){
+                if (carte.accessible(avatar.coordx + 1, avatar.coordy)) {
                     avatar.setDroite(true);
                 }
             }
         }
-        
-        if(!this.demGauche && !this.demDroite) {
+
+        if (!this.demGauche && !this.demDroite) {
             if (this.demHaut && !this.demBas) {
                 //direction demandée = haut
-                if (carte.accessible(avatar.coordx, avatar.coordy-1)){
+                if (carte.accessible(avatar.coordx, avatar.coordy - 1)) {
                     avatar.setHaut(true);
-                    
+
                 }
             }
             if (!this.demHaut && this.demBas) {
                 //direction demandée = bas
-                if (carte.accessible(avatar.coordx, avatar.coordy+1)){
+                if (carte.accessible(avatar.coordx, avatar.coordy + 1)) {
                     avatar.setBas(true);
                 }
             }
-        }   
-        
+        }
+
         this.avatar.miseAJour();
         this.avatar2.miseAJour();
         this.avatar2.miseAJour();
-        this.detectCollisionRessource(avatar, ressource);
+        
+        for (int i = 0; i < listeRessource.size(); i++) {
+            listeRessource.get(i).miseAJour();
+            this.detectCollisionRessource(avatar, listeRessource.get(i));
+            this.detectCollisionRessource(avatar2, listeRessource.get(i));
+            if (listeRessource.get(i).attrape) {
+                listeRessource.remove(i);
+            }
+        }
+        
         for (int i = 0; i < listeBoost.size(); i++) {
             listeBoost.get(i).miseAJour();
             this.detectCollisionBoost(avatar, listeBoost.get(i));
@@ -159,32 +167,32 @@ public class Jeu {
         avatar.setHaut(false);
         avatar.setBas(false);
     }
-    
+
     void setdemDroite(boolean b) {
-        this.demDroite=b ;
+        this.demDroite = b;
     }
 
     void setdemGauche(boolean b) {
-        this.demGauche=b ;
+        this.demGauche = b;
     }
 
     void setdemHaut(boolean b) {
-        this.demHaut=b ;
+        this.demHaut = b;
     }
 
     void setdemBas(boolean b) {
-        this.demBas=b ;
+        this.demBas = b;
     }
-    
-    
+
     public void rendu(Graphics2D contexte) {
         this.carte.rendu(contexte);
         this.avatar.rendu(contexte);
         this.avatar2.rendu(contexte);
-        if (!ressource.attrape) {
-            this.ressource.rendu(contexte);
-        }
 
+        for (int i = 0; i < listeRessource.size(); i++) {
+            listeRessource.get(i).rendu(contexte);
+
+        }
         for (int i = 0; i < listeBoost.size(); i++) {
             listeBoost.get(i).rendu(contexte);
 

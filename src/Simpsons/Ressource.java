@@ -26,7 +26,7 @@ public class Ressource {
     public int largeurMax;
     public int hauteurMax;
     public boolean attrape;
-
+    Random random = new Random();
 
     public Ressource() {
         try {
@@ -34,9 +34,8 @@ public class Ressource {
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Random random = new Random();
-        this.x=random.nextInt(1200 - 250 + 1) + 250;         
-        this.y = random.nextInt(750 - 250 + 1) + 250;
+        this.x = 32 * (random.nextInt(28 - 23) + 23) + 4;
+        this.y = 32 * (random.nextInt(18 - 13) + 13) + 4;
         this.vitesse = 15;
         this.largeurMin = 100;
         this.hauteurMin = 100;
@@ -95,7 +94,7 @@ public class Ressource {
         this.vitesse = vitesse;
     }
 
-    public void miseAJour() throws IOException {        
+    public void miseAJour() throws IOException {
         if (this.attrape) {
             this.setSprite(ImageIO.read(getClass().getClassLoader().getResource("images/boost_bis.png")));
 
@@ -104,7 +103,7 @@ public class Ressource {
 
     public void desactive() {
         if (this.attrape) {
-            
+
         }
     }
 
