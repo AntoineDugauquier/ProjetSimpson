@@ -26,6 +26,7 @@ public class Jeu {
     public SoundPlayer musiqueFond;
     public SoundPlayer musiqueBoost;
     public boolean demHaut, demBas, demGauche, demDroite;
+    public boolean finDePartie;
 
     public Jeu() {
         this.carte = new Carte();
@@ -34,11 +35,20 @@ public class Jeu {
             }
         }
         this.avatar = new Avatar("Homer.png");
-        this.avatar2 = new Avatar("Bart.png");
+//        this.avatar2 = new Avatar("Bart.png");
+        while (!carte.accessible(avatar.base.coordX, avatar.base.coordY)) {
+            avatar.base.modifiePosition();
+        }
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
         this.ressource = new Ressource();
+        while (!carte.accessible(ressource.coordX, ressource.coordY)) {
+            ressource.modifiePosition();
+        }
         this.ressource2 = new Ressource();
+        while (!carte.accessible(ressource2.coordX, ressource2.coordY)) {
+            ressource.modifiePosition();
+        }
         this.listeRessource.add(ressource);
         this.listeRessource.add(ressource2);
         this.listeBoost.add(boost);
@@ -96,76 +106,109 @@ public class Jeu {
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
                 sound.play();
                 ressource.attrape = true;
-                avatar.porteObjet=true;
-                System.out.println( "A attrape un objet");
-                if (avatar.compteurBoost == 2) {
+                avatar.porteObjet = true;
+                System.out.println("A attrape un objet");
+                ressource.modifiePosition();
+            }
+        }
+    }
+
+    public void detectCollisionBase(Avatar avatar, Base base) {
+        // Obtenez les dimensions des images
+        int largeurPersonnage = avatar.sprite.getWidth();
+        int taillePersonnage = avatar.sprite.getHeight();
+        int largeurBonus = base.sprite.getWidth();
+        int tailleBonus = base.sprite.getHeight();
+
+        // Vérifiez si les rectangles des images se chevauchent
+        if (avatar.x < base.x + largeurBonus
+                && avatar.x + largeurPersonnage > base.x
+                && avatar.y < base.y + tailleBonus
+                && avatar.y + taillePersonnage > base.y) {
+            // Collision détectée
+            if (avatar.porteObjet) {
+                SoundPlayer sound = new SoundPlayer("doh.mp3", false);
+                sound.play();
+                avatar.porteObjet = false;
+                avatar.score++;
+                avatar.base.modifiePosition();
+                while (!carte.accessible(avatar.base.coordX, avatar.base.coordY)) {
+                    avatar.base.modifiePosition();
+                }
+                System.out.println("A pose un objet");
+                System.out.println(avatar.score);
+                if (avatar.score == 2) {
                     musiqueFond.stop();
                     musiqueFond.setName("victorySound.mp3");
                     musiqueFond.play();
+                    System.out.println("Victoire");
+//                    this.finDePartie=true;
+
                 }
-            }            
+            }
         }
     }
 
     public void miseAJour() throws IOException {
+        if (!finDePartie) {
+            if (!this.demHaut && !this.demBas) {
+                if (this.demGauche && !this.demDroite) {
+                    //direction demandée = gauche
+                    if (carte.accessible(avatar.coordx - 1, avatar.coordy)) {
+                        avatar.setGauche(true);
 
-        if (!this.demHaut && !this.demBas) {
-            if (this.demGauche && !this.demDroite) {
-                //direction demandée = gauche
-                if (carte.accessible(avatar.coordx - 1, avatar.coordy)) {
-                    avatar.setGauche(true);
-
+                    }
+                }
+                if (!this.demGauche && this.demDroite) {
+                    //direction demandée = droite
+                    if (carte.accessible(avatar.coordx + 1, avatar.coordy)) {
+                        avatar.setDroite(true);
+                    }
                 }
             }
-            if (!this.demGauche && this.demDroite) {
-                //direction demandée = droite
-                if (carte.accessible(avatar.coordx + 1, avatar.coordy)) {
-                    avatar.setDroite(true);
+
+            if (!this.demGauche && !this.demDroite) {
+                if (this.demHaut && !this.demBas) {
+                    //direction demandée = haut
+                    if (carte.accessible(avatar.coordx, avatar.coordy - 1)) {
+                        avatar.setHaut(true);
+
+                    }
+                }
+                if (!this.demHaut && this.demBas) {
+                    //direction demandée = bas
+                    if (carte.accessible(avatar.coordx, avatar.coordy + 1)) {
+                        avatar.setBas(true);
+                    }
                 }
             }
-        }
 
-        if (!this.demGauche && !this.demDroite) {
-            if (this.demHaut && !this.demBas) {
-                //direction demandée = haut
-                if (carte.accessible(avatar.coordx, avatar.coordy - 1)) {
-                    avatar.setHaut(true);
-
+            this.avatar.miseAJour();
+//        this.avatar2.miseAJour();        
+            for (int i = 0; i < listeRessource.size(); i++) {
+                listeRessource.get(i).miseAJour();
+                this.detectCollisionRessource(avatar, listeRessource.get(i));
+//            this.detectCollisionRessource(avatar2, listeRessource.get(i));
+                if (listeRessource.get(i).attrape) {
+//                listeRessource.remove(i);
                 }
             }
-            if (!this.demHaut && this.demBas) {
-                //direction demandée = bas
-                if (carte.accessible(avatar.coordx, avatar.coordy + 1)) {
-                    avatar.setBas(true);
+            this.detectCollisionBase(avatar, avatar.base);
+
+            for (int i = 0; i < listeBoost.size(); i++) {
+                listeBoost.get(i).miseAJour();
+                this.detectCollisionBoost(avatar, listeBoost.get(i));
+//            this.detectCollisionBoost(avatar2, listeBoost.get(i));
+                if (listeBoost.get(i).attrape) {
+                    listeBoost.remove(i);
                 }
             }
+            avatar.setGauche(false);
+            avatar.setDroite(false);
+            avatar.setHaut(false);
+            avatar.setBas(false);
+        } else {
         }
-
-        this.avatar.miseAJour();
-        this.avatar2.miseAJour();
-        this.avatar2.miseAJour();
-        
-        for (int i = 0; i < listeRessource.size(); i++) {
-            listeRessource.get(i).miseAJour();
-            this.detectCollisionRessource(avatar, listeRessource.get(i));
-            this.detectCollisionRessource(avatar2, listeRessource.get(i));
-            if (listeRessource.get(i).attrape) {
-                listeRessource.remove(i);
-            }
-        }
-        
-        for (int i = 0; i < listeBoost.size(); i++) {
-            listeBoost.get(i).miseAJour();
-            this.detectCollisionBoost(avatar, listeBoost.get(i));
-            this.detectCollisionBoost(avatar2, listeBoost.get(i));
-            if (listeBoost.get(i).attrape) {
-                listeBoost.remove(i);
-            }
-        }
-        avatar.setGauche(false);
-        avatar.setDroite(false);
-        avatar.setHaut(false);
-        avatar.setBas(false);
     }
 
     void setdemDroite(boolean b) {
@@ -185,18 +228,20 @@ public class Jeu {
     }
 
     public void rendu(Graphics2D contexte) {
-        this.carte.rendu(contexte);
-        
+        if (!finDePartie) {
+            this.carte.rendu(contexte);
 
-        for (int i = 0; i < listeRessource.size(); i++) {
-            listeRessource.get(i).rendu(contexte);
+            for (int i = 0; i < listeRessource.size(); i++) {
+                listeRessource.get(i).rendu(contexte);
 
+            }
+            for (int i = 0; i < listeBoost.size(); i++) {
+                listeBoost.get(i).rendu(contexte);
+
+            }
+            this.avatar.rendu(contexte);
+//        this.avatar2.rendu(contexte);
+        } else {
         }
-        for (int i = 0; i < listeBoost.size(); i++) {
-            listeBoost.get(i).rendu(contexte);
-
-        }
-        this.avatar.rendu(contexte);
-        this.avatar2.rendu(contexte);
     }
 }

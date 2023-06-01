@@ -26,6 +26,8 @@ public class Avatar {
     public int compteurBoost;
     public int coordx, coordy;
     public boolean porteObjet;
+    public Base base;
+    public int score;
 
 
     public Avatar(String sprite) {
@@ -47,7 +49,8 @@ this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/"+spr
         this.coordy = 0;
         this.x = coordx*32+9; 
         this.y = coordy*32+8;
-        
+        this.base = new Base();
+        this.score=0;
     }
 
     public void setGauche(boolean gauche) {
@@ -104,7 +107,7 @@ this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/"+spr
     }
     
 
-    public void miseAJour() {
+    public void miseAJour() throws IOException {
         if (this.gauche){
             coordx = coordx - (1+compteurBoost);
             x = coordx*32+9;
@@ -137,15 +140,14 @@ this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/"+spr
 //        if (coordy < 0+1) {
 //            coordy = 0+1;
 //        }
-        if(this.compteurBoost !=0){
-            this.vitesse = compteurBoost * 32 ;
-            
-        }
+        this.base.miseAJour();
+        
         
     }
 
     public void rendu(Graphics2D contexte) {
         contexte.drawImage(this.sprite, (int) x, (int) y, null);
+        this.base.rendu(contexte);
     }
 
 }

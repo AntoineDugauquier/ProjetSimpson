@@ -16,10 +16,10 @@ import java.util.Random;
  *
  * @author ybordes
  */
-public class Ressource {
+public class Base {
 
     public BufferedImage sprite;
-    public int coordX, coordY, x, y;
+    public int coordX,coordY,x, y;
     public int vitesse;
     public int largeurMin;
     public int hauteurMin;
@@ -28,17 +28,16 @@ public class Ressource {
     public boolean attrape;
     Random random = new Random();
 
-    public Ressource() {
+    public Base() {
         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Uranium.png"));
+            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/MrBurns.png"));
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.coordX = (random.nextInt(28 - 22) + 22);
-        this.coordY = (random.nextInt(18 - 12) + 12);
-        this.x = 32 * coordX + 4;
-        this.y = 32 * coordY + 4;
-        this.vitesse = 15;
+        this.coordX = (random.nextInt(49 - 1) + 1);
+        this.coordY = (random.nextInt(29 - 1) + 1);
+        this.x = 32 * coordX ;
+        this.y = 32 * coordY-2 ;
         this.largeurMin = 100;
         this.hauteurMin = 100;
         this.largeurMax = 1500;
@@ -46,38 +45,8 @@ public class Ressource {
         this.attrape = false;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Boost other = (Boost) obj;
-        if (this.x != other.x) {
-            return false;
-        }
-        return this.y == other.y;
-    }
-
     public BufferedImage getSprite() {
         return sprite;
-    }
-
-    public void modifiePosition() {
-        this.coordX = (random.nextInt(28 - 22) + 22);
-        this.coordY = (random.nextInt(29 - 12) + 12);
-        this.x = 32 * coordX + 4;
-        this.y = 32 * coordY + 4;
-         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Uranium-Red.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public void setSprite(BufferedImage sprite) {
@@ -86,6 +55,12 @@ public class Ressource {
 
     public int getX() {
         return x;
+    }
+    public void modifiePosition() {
+        this.coordX = (random.nextInt(49 - 1) + 1);
+        this.coordY = (random.nextInt(29 - 1) + 1);
+        this.x = 32 * coordX ;
+        this.y = 32 * coordY -2;
     }
 
     public void setX(int x) {
@@ -109,7 +84,9 @@ public class Ressource {
     }
 
     public void miseAJour() throws IOException {
+        
     }
+
 
     public void rendu(Graphics2D contexte) {
         contexte.drawImage(this.sprite, (int) x, (int) y, null);
