@@ -136,6 +136,9 @@ public class Jeu {
                 avatar.porteObjet = true;
                 System.out.println("A attrape un objet");
                 ressource.modifiePosition();
+                while (!carte.accessible(ressource.coordX, ressource.coordY)) {
+                    ressource.modifiePosition();
+                }
             }
         }
     }

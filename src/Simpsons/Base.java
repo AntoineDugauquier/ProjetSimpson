@@ -34,7 +34,7 @@ public class Base {
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.coordX = (random.nextInt(49 - 1) + 1);
+        this.coordX = (random.nextInt(44 - 5) + 5);
         this.coordY = (random.nextInt(29 - 1) + 1);
         this.x = 32 * coordX ;
         this.y = 32 * coordY-2 ;

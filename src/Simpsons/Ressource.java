@@ -70,7 +70,7 @@ public class Ressource {
 
     public void modifiePosition() {
         this.coordX = (random.nextInt(28 - 22) + 22);
-        this.coordY = (random.nextInt(29 - 12) + 12);
+        this.coordY = (random.nextInt(18 - 12) + 12);
         this.x = 32 * coordX + 4;
         this.y = 32 * coordY + 4;
 //         try {
