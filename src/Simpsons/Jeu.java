@@ -43,7 +43,7 @@ public class Jeu {
             for (int j = 0; j < 960; j += 32) {
             }
         }
-        this.avatar = new Avatar("Marge");
+        this.avatar = new Avatar("Homer");
         this.base = new Base();
 //        this.avatar2 = new Avatar("Bart.png");
         while (!carte.accessible(base.coordX, base.coordY)) {
@@ -64,41 +64,9 @@ public class Jeu {
         this.listeBoost.add(boost);
         this.listeBoost.add(boost2);
         musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
-//        musiqueFond.play();
+        musiqueFond.play();
         musiqueBoost = new SoundPlayer("doh.mp3", false);
 
-        
-
-    }
-
-    public void detectCollisionBoost(Avatar avatar, Boost boost) {
-        // Obtenez les dimensions des images
-        int largeurPersonnage = avatar.sprite.getWidth();
-        int taillePersonnage = avatar.sprite.getHeight();
-        int largeurBonus = boost.sprite.getWidth();
-        int tailleBonus = boost.sprite.getHeight();
-
-        // Vérifiez si les rectangles des images se chevauchent
-        if (avatar.x < boost.x + largeurBonus
-                && avatar.x + largeurPersonnage > boost.x
-                && avatar.y < boost.y + tailleBonus
-                && avatar.y + taillePersonnage > boost.y) {
-            // Collision détectée
-            if (!boost.attrape) {
-                System.out.println("boost !");
-
-                SoundPlayer sound = new SoundPlayer("doh.mp3", false);
-                sound.play();
-                boost.attrape = true;
-                avatar.compteurBoost++;
-                System.out.println(avatar.compteurBoost);
-                if (avatar.compteurBoost == 2) {
-                    musiqueFond.stop();
-                    musiqueFond.setName("victorySound.mp3");
-                    musiqueFond.play();
-                }
-            }
-        }
     }
 
     public void detectCollisionBob(Avatar avatar, Boost boost) throws IOException {
@@ -146,6 +114,23 @@ public class Jeu {
                 ressource.modifiePosition();
                 while (!carte.accessible(ressource.coordX, ressource.coordY)) {
                     ressource.modifiePosition();
+                }
+                if (avatar.score == 2) {
+                    musiqueFond.stop();
+                    musiqueFond.setName("victorySound.mp3");
+                    musiqueFond.play();
+                    try {
+                        Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+                        Statement statement = connexion.createStatement();
+
+                        statement.executeUpdate("DELETE FROM Avatar;");
+                        statement.close();
+                        connexion.close();
+
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         }
@@ -270,8 +255,9 @@ public class Jeu {
         this.demBas = b;
     }
 
-    public void rendu(Graphics2D contexte) {
+    public void rendu(Graphics2D contexte) throws IOException {        
         if (!finDePartie) {
+            
             this.carte.rendu(contexte);
 
             for (int i = 0; i < listeRessource.size(); i++) {
