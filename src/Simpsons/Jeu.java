@@ -7,11 +7,15 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import outils.OutilsJDBC;
+import outils.SingletonJDBC;
 
 /**
  * Exemple de classe jeu
@@ -39,7 +43,7 @@ public class Jeu {
             for (int j = 0; j < 960; j += 32) {
             }
         }
-        this.avatar = new Avatar("Homer.png");
+        this.avatar = new Avatar("Marge");
         this.base = new Base();
 //        this.avatar2 = new Avatar("Bart.png");
         while (!carte.accessible(base.coordX, base.coordY)) {
@@ -60,8 +64,10 @@ public class Jeu {
         this.listeBoost.add(boost);
         this.listeBoost.add(boost2);
         musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
-        musiqueFond.play();
+//        musiqueFond.play();
         musiqueBoost = new SoundPlayer("doh.mp3", false);
+
+        
 
     }
 
@@ -109,15 +115,11 @@ public class Jeu {
                 && avatar.y + taillePersonnage > boost.y) {
             // Collision détectée
             if (!boost.attrape) {
-                System.out.println("boost !");
-
+//                System.out.println("boost !");//
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
                 sound.play();
-                avatar.coordx = 2;
-                avatar.coordy = 0;
-                avatar.x = avatar.coordx * 32 + 9;
-                avatar.y = avatar.coordy * 32 + 8;
                 avatar.miseAJour();
+                avatar.retourDepart();
             }
         }
     }
@@ -143,7 +145,7 @@ public class Jeu {
                 System.out.println("A attrape un objet");
                 ressource.modifiePosition();
                 while (!carte.accessible(ressource.coordX, ressource.coordY)) {
-                    ressource.modifiePosition();                  
+                    ressource.modifiePosition();
                 }
             }
         }

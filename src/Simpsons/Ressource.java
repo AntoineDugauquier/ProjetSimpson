@@ -78,6 +78,23 @@ public class Ressource {
         this.coordY = (random.nextInt(18 - 12) + 12);
         this.x = 32 * coordX + 4;
         this.y = 32 * coordY + 4;
+//        try {
+//
+//            Connection connexion = DriverManager.getConnection("jdbc:mariadb://nemrod.ens2m.fr:3306/2022-2023_s2_vs2_tp1_Simpson", "Simpson", "rQKfwVi)97j3eAAy");
+//
+//            PreparedStatement requete = connexion.prepareStatement("UPDATE ressource SET x = ?, y = ?" );
+//            requete.setDouble(1, x);
+//            requete.setDouble(2, y);
+//            System.out.println(requete);
+//            int nombreDeModifications = requete.executeUpdate();
+//            System.out.println(nombreDeModifications + " enregistrement(s) modifie(s)");
+//
+//            requete.close();
+//            connexion.close();
+//
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
 //         try {
 //            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Uranium-Red.png"));
 //        } catch (IOException ex) {
