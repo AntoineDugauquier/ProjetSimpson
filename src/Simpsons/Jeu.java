@@ -51,11 +51,11 @@ public class Jeu {
         }
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
-        this.ressource = new Ressource();
+        this.ressource = new Ressource(1);
         while (!carte.accessible(ressource.coordX, ressource.coordY)) {
             ressource.modifiePosition();
         }
-        this.ressource2 = new Ressource();
+        this.ressource2 = new Ressource(2);
         while (!carte.accessible(ressource2.coordX, ressource2.coordY)) {
             ressource.modifiePosition();
         }
@@ -119,18 +119,7 @@ public class Jeu {
                     musiqueFond.stop();
                     musiqueFond.setName("victorySound.mp3");
                     musiqueFond.play();
-                    try {
-                        Connection connexion = SingletonJDBC.getInstance().getConnection();
-
-                        Statement statement = connexion.createStatement();
-
-                        statement.executeUpdate("DELETE FROM Avatar;");
-                        statement.close();
-                        connexion.close();
-
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
+                    
                 }
             }
         }
@@ -165,6 +154,21 @@ public class Jeu {
                     musiqueFond.setName("victorySound.mp3");
                     musiqueFond.play();
                     System.out.println("Victoire");
+                    try {
+                        Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+                        Statement statement = connexion.createStatement();
+
+                        statement.executeUpdate("DELETE FROM Avatar;");
+                        statement.executeUpdate("DELETE FROM Base;");
+                        statement.executeUpdate("DELETE FROM Ressource;");
+                        
+                        statement.close();
+//                        connexion.close();
+
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
 //                    this.finDePartie=true;
 
                 }
