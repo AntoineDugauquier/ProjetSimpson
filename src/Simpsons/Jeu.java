@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import outils.OutilsJDBC;
 import outils.SingletonJDBC;
 
@@ -26,6 +27,7 @@ public class Jeu {
 
     private Carte carte;
     //private BufferedImage fond;
+
     public Avatar avatar;
     public Boost boost, boost2;
     public Ressource ressource, ressource2;
@@ -36,6 +38,7 @@ public class Jeu {
     public boolean demHaut, demBas, demGauche, demDroite;
     public boolean finDePartie;
     public Base base;
+    ArrayList<String> listeNom = new ArrayList();
 
     public Jeu() {
         this.carte = new Carte();
@@ -43,7 +46,46 @@ public class Jeu {
             for (int j = 0; j < 960; j += 32) {
             }
         }
-        this.avatar = new Avatar("Homer");
+        this.listeNom.add("Lisa");
+        this.listeNom.add("Bart");
+        this.listeNom.add("Homer");
+        this.listeNom.add("Marge");
+
+        try {
+
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            Statement statement = connexion.createStatement();
+
+            PreparedStatement requete = connexion.prepareStatement("SELECT idavatar FROM Avatar");
+            ResultSet resultat = requete.executeQuery();
+
+            requete.executeQuery();
+
+            while (resultat.next()) {
+
+                String identifiant = resultat.getString("idavatar");
+                this.listeNom.remove(identifiant);
+            }
+
+            statement.close();
+            requete.close();
+//            connexion.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        String nom = JOptionPane.showInputDialog(null, " Choisir un pseudo parmi " + listeNom);
+        while (!this.listeNom.contains(nom)) {
+            nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom);
+        }
+        if (nom != null) {
+            this.listeNom.remove(nom);
+            System.out.println(" S a i s i e = " + nom);
+        }
+
+        this.avatar = new Avatar(nom);
         this.base = new Base();
 //        this.avatar2 = new Avatar("Bart.png");
         while (!carte.accessible(base.coordX, base.coordY)) {
@@ -114,9 +156,8 @@ public class Jeu {
                 ressource.modifiePosition();
                 while (!carte.accessible(ressource.coordX, ressource.coordY)) {
                     ressource.modifiePosition();
-                }           
-                    
-                
+                }
+
             }
         }
     }
@@ -158,7 +199,7 @@ public class Jeu {
                         statement.executeUpdate("DELETE FROM Avatar;");
                         statement.executeUpdate("DELETE FROM Base;");
                         statement.executeUpdate("DELETE FROM Ressource;");
-                        
+
                         statement.close();
 //                        connexion.close();
 
@@ -255,9 +296,9 @@ public class Jeu {
         this.demBas = b;
     }
 
-    public void rendu(Graphics2D contexte) throws IOException {        
+    public void rendu(Graphics2D contexte) throws IOException {
         if (!finDePartie) {
-            
+
             this.carte.rendu(contexte);
 
             for (int i = 0; i < listeRessource.size(); i++) {
