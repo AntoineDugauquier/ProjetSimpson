@@ -26,7 +26,7 @@ public class Avatar {
     public int compteurBoost;
     public int coordx, coordy;
     public boolean porteObjet;
-    public Base base;
+//    public Base base;
     public int score;
 
     public Avatar(String sprite) {
@@ -48,7 +48,6 @@ public class Avatar {
         this.coordy = 0;
         this.x = coordx * 32 + 9;
         this.y = coordy * 32 + 8;
-        this.base = new Base();
         this.score = 0;
     }
 
@@ -129,7 +128,6 @@ public class Avatar {
             coordy = coordy + (1 + compteurBoost);
             y = coordy * 32 + 8;
         }
-        this.base.miseAJour();
 //        if (coordx > 50-2) {
 //            coordx = 50-2;
 //        }
@@ -147,7 +145,6 @@ public class Avatar {
 
     public void rendu(Graphics2D contexte) {
         contexte.drawImage(this.sprite, (int) x, (int) y, null);
-        this.base.rendu(contexte);
     }
 
 }

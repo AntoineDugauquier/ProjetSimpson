@@ -4,6 +4,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +22,7 @@ public class Jeu {
 
     private Carte carte;
     //private BufferedImage fond;
-    public Avatar avatar, avatar2;
+    public Avatar avatar;
     public Boost boost, boost2;
     public Ressource ressource, ressource2;
     ArrayList<Boost> listeBoost = new ArrayList();
@@ -27,6 +31,7 @@ public class Jeu {
     public SoundPlayer musiqueBoost;
     public boolean demHaut, demBas, demGauche, demDroite;
     public boolean finDePartie;
+    public Base base;
 
     public Jeu() {
         this.carte = new Carte();
@@ -35,9 +40,10 @@ public class Jeu {
             }
         }
         this.avatar = new Avatar("Homer.png");
+        this.base = new Base();
 //        this.avatar2 = new Avatar("Bart.png");
-        while (!carte.accessible(avatar.base.coordX, avatar.base.coordY)) {
-            avatar.base.modifiePosition();
+        while (!carte.accessible(base.coordX, base.coordY)) {
+            base.modifiePosition();
         }
         this.boost = new Boost(true);
         this.boost2 = new Boost(false);
@@ -138,32 +144,48 @@ public class Jeu {
                 ressource.modifiePosition();
                 while (!carte.accessible(ressource.coordX, ressource.coordY)) {
                     ressource.modifiePosition();
+
+                    try {
+                        Connection connexion = DriverManager.getConnection("jdbc:mariadb://nemrod.ens2m.fr:3306/2022-2023_s2_vs2_tp1_Simpson", "Simpson", "rQKfwVi)97j3eAAy");
+
+                        PreparedStatement requete = connexion.prepareStatement("UPDATE Ressource SET x = ?, y = ?");
+                        requete.setDouble(1, ressource.x);
+                        requete.setDouble(2, ressource.y);
+                        System.out.println(requete);
+                        int nombreDeModifications = requete.executeUpdate();
+                        System.out.println(nombreDeModifications + " enregistrement(s) modifie(s)");
+
+                        requete.close();
+                        connexion.close();
+
+                    } catch (SQLException ex) {
+                    }
                 }
             }
         }
     }
 
-    public void detectCollisionBase(Avatar avatar) {
+    public void detectCollisionBase(Avatar avatar, Base base) {
         // Obtenez les dimensions des images
         int largeurPersonnage = avatar.sprite.getWidth();
         int taillePersonnage = avatar.sprite.getHeight();
-        int largeurBonus = avatar.base.sprite.getWidth();
-        int tailleBonus = avatar.base.sprite.getHeight();
+        int largeurBonus = base.sprite.getWidth();
+        int tailleBonus = base.sprite.getHeight();
 
         // Vérifiez si les rectangles des images se chevauchent
-        if (avatar.x < avatar.base.x + largeurBonus
-                && avatar.x + largeurPersonnage > avatar.base.x
-                && avatar.y < avatar.base.y + tailleBonus
-                && avatar.y + taillePersonnage > avatar.base.y) {
+        if (avatar.x < base.x + largeurBonus
+                && avatar.x + largeurPersonnage > base.x
+                && avatar.y < base.y + tailleBonus
+                && avatar.y + taillePersonnage > base.y) {
             // Collision détectée
             if (avatar.porteObjet) {
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
                 sound.play();
                 avatar.porteObjet = false;
                 avatar.score++;
-                avatar.base.modifiePosition();
-                while (!carte.accessible(avatar.base.coordX, avatar.base.coordY)) {
-                    avatar.base.modifiePosition();
+                base.modifiePosition();
+                while (!carte.accessible(base.coordX, base.coordY)) {
+                    base.modifiePosition();
                 }
                 System.out.println("A pose un objet");
                 System.out.println(avatar.score);
@@ -233,7 +255,8 @@ public class Jeu {
         avatar.setHaut(false);
         avatar.setBas(false);
 
-        this.detectCollisionBase(avatar);
+        this.detectCollisionBase(avatar, base);
+        this.base.miseAJour();
 
         for (int i = 0; i < listeBoost.size(); i++) {
             this.detectCollisionBob(avatar, listeBoost.get(i));
@@ -274,8 +297,7 @@ public class Jeu {
 
             }
             this.avatar.rendu(contexte);
-//        this.avatar2.rendu(contexte);
-        } else {
+            this.base.rendu(contexte);
         }
     }
 }
