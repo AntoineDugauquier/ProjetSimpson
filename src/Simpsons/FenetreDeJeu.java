@@ -63,7 +63,11 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         } catch (IOException ex) {
             Logger.getLogger(FenetreDeJeu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.jeu.rendu(contexte);
+        try {
+            this.jeu.rendu(contexte);
+        } catch (IOException ex) {
+            Logger.getLogger(FenetreDeJeu.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.score.setText("Score: " + this.jeu.getAvatar().getScore()); // Mettez à jour le score affiché
         this.jLabel1.repaint();
     }
