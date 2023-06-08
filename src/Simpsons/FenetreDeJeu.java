@@ -7,12 +7,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 import javax.swing.Timer;
+import outils.SingletonJDBC;
 
 /**
  * Exemple de fenetre de jeu en utilisant uniquement des commandes
@@ -25,7 +32,6 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     private JLabel jLabel1;
     private Jeu jeu;
     private Timer timer;
-    private JLabel score;
 
     public FenetreDeJeu() {
         // initialisation de la fenetre
@@ -50,9 +56,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         this.timer = new Timer(100, this);
         this.timer.start();
       //SCORE//
-        this.score = new JLabel("Score: 0"); // Remplacez 0 par la valeur initiale du score
-        this.score.setBounds(100, 100, 100, 200); // Définissez les coordonnées et les dimensions de l'étiquette
-        this.add(this.score); // Ajoutez l'étiquette à la fenêtre
+
     }
 
     // Methode appelee par le timer et qui effectue la boucle de jeu
@@ -68,7 +72,6 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         } catch (IOException ex) {
             Logger.getLogger(FenetreDeJeu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.score.setText("Score: " + this.jeu.getAvatar().getScore()); // Mettez à jour le score affiché
         this.jLabel1.repaint();
     }
 
@@ -115,6 +118,66 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     public static void main(String[] args) {
         FenetreDeJeu fenetre = new FenetreDeJeu();
         fenetre.setVisible(true);
+                //SCORE//
+        JFrame frame = new JFrame("Score");
+        frame.setSize(250, 250);
+        frame.setLocation(1600, 0);
+        frame.setLayout(null);
+        frame.setVisible(true);
+        JTextField scoredeHomer = new JTextField();
+        JTextField scoredeMarge = new JTextField();
+        JTextField scoredeBart = new JTextField();
+        JTextField scoredeLisa = new JTextField();
+        try {
+
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            PreparedStatement requeteHomer = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Homer'");
+            PreparedStatement requeteMarge = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Marge'");
+            PreparedStatement requeteBart = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Bart'");
+            PreparedStatement requeteLisa = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Lisa'");
+            ResultSet resultatHomer = requeteHomer.executeQuery();
+
+            while (resultatHomer.next()) {
+                int scoreHomer = resultatHomer.getInt("score");
+                scoredeHomer.setText(String.valueOf(scoreHomer));
+                
+            }
+            requeteHomer.close();
+            
+            ResultSet resultatMarge = requeteMarge.executeQuery();
+            while (resultatMarge.next()) {
+                int scoreMarge = resultatMarge.getInt("score");
+                scoredeMarge.setText(String.valueOf(scoreMarge));
+                
+            }
+            requeteMarge.close();
+            
+            ResultSet resultatBart = requeteBart.executeQuery();
+            while (resultatBart.next()) {
+                int scoreBart = resultatBart.getInt("score");
+                scoredeBart.setText(String.valueOf(scoreBart));
+                
+            }
+            requeteBart.close();
+            
+            ResultSet resultatLisa = requeteLisa.executeQuery();
+            while (resultatLisa.next()) {
+                int scoreLisa = resultatLisa.getInt("score");
+                scoredeLisa.setText(String.valueOf(scoreLisa));
+                
+            }
+            requeteLisa.close();
+
+//            connexion.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        frame.add(scoredeHomer);
+        frame.add(scoredeMarge);
+        frame.add(scoredeBart);
+        frame.add(scoredeLisa);
     }
 
 }
