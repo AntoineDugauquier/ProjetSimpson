@@ -114,13 +114,9 @@ public class Jeu {
                 ressource.modifiePosition();
                 while (!carte.accessible(ressource.coordX, ressource.coordY)) {
                     ressource.modifiePosition();
-                }
-                if (avatar.score == 2) {
-                    musiqueFond.stop();
-                    musiqueFond.setName("victorySound.mp3");
-                    musiqueFond.play();
+                }           
                     
-                }
+                
             }
         }
     }
