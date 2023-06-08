@@ -143,23 +143,7 @@ public class Jeu {
                 System.out.println("A attrape un objet");
                 ressource.modifiePosition();
                 while (!carte.accessible(ressource.coordX, ressource.coordY)) {
-                    ressource.modifiePosition();
-
-                    try {
-                        Connection connexion = DriverManager.getConnection("jdbc:mariadb://nemrod.ens2m.fr:3306/2022-2023_s2_vs2_tp1_Simpson", "Simpson", "rQKfwVi)97j3eAAy");
-
-                        PreparedStatement requete = connexion.prepareStatement("UPDATE Ressource SET x = ?, y = ?");
-                        requete.setDouble(1, ressource.x);
-                        requete.setDouble(2, ressource.y);
-                        System.out.println(requete);
-                        int nombreDeModifications = requete.executeUpdate();
-                        System.out.println(nombreDeModifications + " enregistrement(s) modifie(s)");
-
-                        requete.close();
-                        connexion.close();
-
-                    } catch (SQLException ex) {
-                    }
+                    ressource.modifiePosition();                  
                 }
             }
         }

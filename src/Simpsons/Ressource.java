@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,27 +43,6 @@ public class Ressource {
         this.x = 32 * coordX + 4;
         this.y = 32 * coordY + 4;
         
-try {
-
-            Connection connexion = DriverManager.getConnection("jdbc:mariadb://nemrod.ens2m.fr:3306/tp_jdbc", "etudiant", "YTDTvj9TR3CDYCmP");
-
-            PreparedStatement requete = connexion.prepareStatement("SELECT id, espece, latitude, longitude, proprietaire FROM pokemons WHERE proprietaire = ?");
-            requete.setString(1, "Poule");
-            System.out.println(requete);
-            ResultSet resultat = requete.executeQuery();
-            while (resultat.next()) {
-                String pseudo = resultat.getString("espece");
-                double latitude = resultat.getDouble("latitude");
-                double longitude = resultat.getDouble("longitude");
-                System.out.println(pseudo + " = (" + latitude + "; " + longitude + ")");
-            }
-            OutilsJDBC.afficherResultSet(resultat);
-            requete.close();
-            connexion.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
         
         this.largeurMin = 100;
         this.hauteurMin = 100;
@@ -136,23 +114,7 @@ try {
     }
 
     public void miseAJour() throws IOException {
-        try {
-
-            Connection connexion = DriverManager.getConnection("jdbc:mariadb://nemrod.ens2m.fr:3306/2022-2023_s2_vs2_tp1_Simpson", "Simpson", "rQKfwVi)97j3eAAy");
-
-            PreparedStatement requete = connexion.prepareStatement("UPDATE Ressource SET x = ?, y = ?" );
-            requete.setDouble(1, x);
-            requete.setDouble(2, y);
-            System.out.println(requete);
-            int nombreDeModifications = requete.executeUpdate();
-            System.out.println(nombreDeModifications + " enregistrement(s) modifie(s)");
-
-            requete.close();
-            connexion.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        
     }
 
     public void rendu(Graphics2D contexte) {
