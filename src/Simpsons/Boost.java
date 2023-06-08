@@ -29,7 +29,7 @@ public class Boost {
 
     public Boost(boolean choixSens) {
         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/donuts_bis.png"));
+            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob-Copie.png"));
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -104,10 +104,10 @@ public class Boost {
             y = (int) (15 * 32 + 250 * Math.sin(System.currentTimeMillis() * 0.0008 + 3.1415926535897932384626433832795028841971693993751058209749445923) - 25);
 
         }
-        if (this.attrape) {
-            this.setSprite(ImageIO.read(getClass().getClassLoader().getResource("images/boost_bis.png")));
-
-        }
+//        if (this.attrape) {
+//            this.setSprite(ImageIO.read(getClass().getClassLoader().getResource("images/boost_bis.png")));
+//
+//        }
     }
 
     public void desactive() {

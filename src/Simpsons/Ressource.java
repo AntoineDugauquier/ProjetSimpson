@@ -73,11 +73,11 @@ public class Ressource {
         this.coordY = (random.nextInt(29 - 12) + 12);
         this.x = 32 * coordX + 4;
         this.y = 32 * coordY + 4;
-         try {
-            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Uranium-Red.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//         try {
+//            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Uranium-Red.png"));
+//        } catch (IOException ex) {
+//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     public void setSprite(BufferedImage sprite) {

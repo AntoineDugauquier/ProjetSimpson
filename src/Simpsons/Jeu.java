@@ -74,8 +74,8 @@ public class Jeu {
             // Collision détectée
             if (!boost.attrape) {
                 System.out.println("boost !");
+
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
-                sound.stop();
                 sound.play();
                 boost.attrape = true;
                 avatar.compteurBoost++;
@@ -85,6 +85,33 @@ public class Jeu {
                     musiqueFond.setName("victorySound.mp3");
                     musiqueFond.play();
                 }
+            }
+        }
+    }
+
+    public void detectCollisionBob(Avatar avatar, Boost boost) throws IOException {
+        // Obtenez les dimensions des images
+        int largeurPersonnage = avatar.sprite.getWidth();
+        int taillePersonnage = avatar.sprite.getHeight();
+        int largeurBonus = boost.sprite.getWidth();
+        int tailleBonus = boost.sprite.getHeight();
+
+        // Vérifiez si les rectangles des images se chevauchent
+        if (avatar.x < boost.x + largeurBonus
+                && avatar.x + largeurPersonnage > boost.x
+                && avatar.y < boost.y + tailleBonus
+                && avatar.y + taillePersonnage > boost.y) {
+            // Collision détectée
+            if (!boost.attrape) {
+                System.out.println("boost !");
+
+                SoundPlayer sound = new SoundPlayer("doh.mp3", false);
+                sound.play();
+                avatar.coordx = 2;
+                avatar.coordy = 0;
+                avatar.x = avatar.coordx * 32 + 9;
+                avatar.y = avatar.coordy * 32 + 8;
+                avatar.miseAJour();
             }
         }
     }
@@ -113,18 +140,18 @@ public class Jeu {
         }
     }
 
-    public void detectCollisionBase(Avatar avatar, Base base) {
+    public void detectCollisionBase(Avatar avatar) {
         // Obtenez les dimensions des images
         int largeurPersonnage = avatar.sprite.getWidth();
         int taillePersonnage = avatar.sprite.getHeight();
-        int largeurBonus = base.sprite.getWidth();
-        int tailleBonus = base.sprite.getHeight();
+        int largeurBonus = avatar.base.sprite.getWidth();
+        int tailleBonus = avatar.base.sprite.getHeight();
 
         // Vérifiez si les rectangles des images se chevauchent
-        if (avatar.x < base.x + largeurBonus
-                && avatar.x + largeurPersonnage > base.x
-                && avatar.y < base.y + tailleBonus
-                && avatar.y + taillePersonnage > base.y) {
+        if (avatar.x < avatar.base.x + largeurBonus
+                && avatar.x + largeurPersonnage > avatar.base.x
+                && avatar.y < avatar.base.y + tailleBonus
+                && avatar.y + taillePersonnage > avatar.base.y) {
             // Collision détectée
             if (avatar.porteObjet) {
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
@@ -154,14 +181,14 @@ public class Jeu {
             if (!this.demHaut && !this.demBas) {
                 if (this.demGauche && !this.demDroite) {
                     //direction demandée = gauche
-                    if (carte.accessible(avatar.coordx - 1, avatar.coordy)) {
+                    if (carte.accessible(avatar.coordx - (1 + avatar.compteurBoost), avatar.coordy)) {
                         avatar.setGauche(true);
 
                     }
                 }
                 if (!this.demGauche && this.demDroite) {
                     //direction demandée = droite
-                    if (carte.accessible(avatar.coordx + 1, avatar.coordy)) {
+                    if (carte.accessible(avatar.coordx + (1 + avatar.compteurBoost), avatar.coordy)) {
                         avatar.setDroite(true);
                     }
                 }
@@ -170,45 +197,49 @@ public class Jeu {
             if (!this.demGauche && !this.demDroite) {
                 if (this.demHaut && !this.demBas) {
                     //direction demandée = haut
-                    if (carte.accessible(avatar.coordx, avatar.coordy - 1)) {
+                    if (carte.accessible(avatar.coordx, avatar.coordy - (1 + avatar.compteurBoost))) {
                         avatar.setHaut(true);
 
                     }
                 }
                 if (!this.demHaut && this.demBas) {
                     //direction demandée = bas
-                    if (carte.accessible(avatar.coordx, avatar.coordy + 1)) {
+                    if (carte.accessible(avatar.coordx, avatar.coordy + (1 + avatar.compteurBoost))) {
                         avatar.setBas(true);
                     }
                 }
             }
 
-            this.avatar.miseAJour();
-//        this.avatar2.miseAJour();        
+            avatar.miseAJour();
+
             for (int i = 0; i < listeRessource.size(); i++) {
                 listeRessource.get(i).miseAJour();
                 this.detectCollisionRessource(avatar, listeRessource.get(i));
-//            this.detectCollisionRessource(avatar2, listeRessource.get(i));
                 if (listeRessource.get(i).attrape) {
 //                listeRessource.remove(i);
                 }
             }
-            this.detectCollisionBase(avatar, avatar.base);
 
-            for (int i = 0; i < listeBoost.size(); i++) {
-                listeBoost.get(i).miseAJour();
-                this.detectCollisionBoost(avatar, listeBoost.get(i));
 //            this.detectCollisionBoost(avatar2, listeBoost.get(i));
-                if (listeBoost.get(i).attrape) {
-                    listeBoost.remove(i);
-                }
-            }
-            avatar.setGauche(false);
-            avatar.setDroite(false);
-            avatar.setHaut(false);
-            avatar.setBas(false);
-        } else {
+//                if (listeBoost.get(i).attrape) {
+//                    listeBoost.remove(i);
+//                }
         }
+        avatar.setGauche(false);
+        avatar.setDroite(false);
+        avatar.setHaut(false);
+        avatar.setBas(false);
+
+        this.detectCollisionBase(avatar);
+
+        for (int i = 0; i < listeBoost.size(); i++) {
+            this.detectCollisionBob(avatar, listeBoost.get(i));
+            listeBoost.get(i).miseAJour();
+        }
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
     }
 
     void setdemDroite(boolean b) {

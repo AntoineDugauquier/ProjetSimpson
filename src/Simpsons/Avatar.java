@@ -29,16 +29,15 @@ public class Avatar {
     public Base base;
     public int score;
 
-
     public Avatar(String sprite) {
         try {
 //            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite.png"));
-this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/"+sprite));
+            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/" + sprite));
 
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
+
         this.vitesse = 32;
         this.haut = false;
         this.bas = false;
@@ -47,10 +46,10 @@ this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/"+spr
         this.compteurBoost = 0;
         this.coordx = 2;
         this.coordy = 0;
-        this.x = coordx*32+9; 
-        this.y = coordy*32+8;
+        this.x = coordx * 32 + 9;
+        this.y = coordy * 32 + 8;
         this.base = new Base();
-        this.score=0;
+        this.score = 0;
     }
 
     public void setGauche(boolean gauche) {
@@ -89,7 +88,6 @@ this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/"+spr
         this.bas = bas;
     }
 
-
     public BufferedImage getSprite() {
         return sprite;
     }
@@ -105,29 +103,33 @@ this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/"+spr
     public double getVitesse() {
         return vitesse;
     }
+
+    public int getScore() {
+        return score;
+    }
     
 
     public void miseAJour() throws IOException {
-        if (this.gauche){
-            coordx = coordx - (1+compteurBoost);
-            x = coordx*32+9;
+        if (this.gauche) {
+            coordx = coordx - (1 + compteurBoost);
+            x = coordx * 32 + 9;
         }
-            
+
         if (this.droite) {
-            coordx = coordx + (1+compteurBoost);
-            x = coordx*32+9;
+            coordx = coordx + (1 + compteurBoost);
+            x = coordx * 32 + 9;
         }
-        
+
         if (this.haut) {
-            coordy = coordy - (1+compteurBoost);
-            y = coordy*32+8;
+            coordy = coordy - (1 + compteurBoost);
+            y = coordy * 32 + 8;
         }
-        
+
         if (this.bas) {
-            coordy = coordy + (1+compteurBoost);
-            y = coordy*32+8;
-        }   
-            
+            coordy = coordy + (1 + compteurBoost);
+            y = coordy * 32 + 8;
+        }
+        this.base.miseAJour();
 //        if (coordx > 50-2) {
 //            coordx = 50-2;
 //        }
@@ -140,9 +142,7 @@ this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/"+spr
 //        if (coordy < 0+1) {
 //            coordy = 0+1;
 //        }
-        this.base.miseAJour();
-        
-        
+
     }
 
     public void rendu(Graphics2D contexte) {

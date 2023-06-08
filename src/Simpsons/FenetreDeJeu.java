@@ -29,19 +29,18 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
 
     public FenetreDeJeu() {
         // initialisation de la fenetre
-        this.setSize(1600,960);
+        this.setSize(1600, 960);
         this.setTitle("Simpson Partie");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addKeyListener(this);
-        this.jLabel1 = new JLabel();        
-        this.jLabel1.setPreferredSize(new java.awt.Dimension(1600,960));
+        this.jLabel1 = new JLabel();
+        this.jLabel1.setPreferredSize(new java.awt.Dimension(1600, 960));
         this.setContentPane(this.jLabel1);
         this.pack();
 
         // Creation du jeu
         this.jeu = new Jeu();
-
         // Creation du buffer pour l'affichage du jeu et recuperation du contexte graphique
         this.framebuffer = new BufferedImage(this.jLabel1.getWidth(), this.jLabel1.getHeight(), BufferedImage.TYPE_INT_ARGB);
         this.jLabel1.setIcon(new ImageIcon(framebuffer));
@@ -50,6 +49,10 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         // Creation du Timer qui appelle this.actionPerformed() tous les 40 ms
         this.timer = new Timer(100, this);
         this.timer.start();
+      //SCORE//
+        this.score = new JLabel("Score: 0"); // Remplacez 0 par la valeur initiale du score
+        this.score.setBounds(100, 100, 100, 200); // Définissez les coordonnées et les dimensions de l'étiquette
+        this.add(this.score); // Ajoutez l'étiquette à la fenêtre
     }
 
     // Methode appelee par le timer et qui effectue la boucle de jeu
@@ -61,6 +64,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
             Logger.getLogger(FenetreDeJeu.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.jeu.rendu(contexte);
+        this.score.setText("Score: " + this.jeu.getAvatar().getScore()); // Mettez à jour le score affiché
         this.jLabel1.repaint();
     }
 
@@ -100,7 +104,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
             this.jeu.setdemBas(false);
         }
     }
-      
+
     /**
      * @param args the command line arguments
      */
