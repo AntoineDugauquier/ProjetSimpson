@@ -1,6 +1,8 @@
 package Simpsons;
 
+import java.awt.FlowLayout;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -14,9 +16,11 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import outils.SingletonJDBC;
@@ -32,6 +36,11 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     private JLabel jLabel1;
     private Jeu jeu;
     private Timer timer;
+    static int scoreHomer;
+    static int scoreMarge;
+    static int scoreBart;
+    static int scoreLisa;
+    
 
     public FenetreDeJeu() {
         // initialisation de la fenetre
@@ -73,6 +82,53 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
             Logger.getLogger(FenetreDeJeu.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.jLabel1.repaint();
+        try {
+
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            PreparedStatement requeteHomer = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Homer'");
+            PreparedStatement requeteMarge = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Marge'");
+            PreparedStatement requeteBart = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Bart'");
+            PreparedStatement requeteLisa = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Lisa'");
+            ResultSet resultatHomer = requeteHomer.executeQuery();
+
+            while (resultatHomer.next()) {
+                scoreHomer = resultatHomer.getInt("score");
+                
+                System.out.println(String.valueOf(scoreHomer));
+                
+            }
+            requeteHomer.close();
+            
+            ResultSet resultatMarge = requeteMarge.executeQuery();
+            while (resultatMarge.next()) {
+                scoreMarge = resultatMarge.getInt("score");
+                
+                
+            }
+            requeteMarge.close();
+            
+            ResultSet resultatBart = requeteBart.executeQuery();
+            while (resultatBart.next()) {
+                scoreBart = resultatBart.getInt("score");
+                
+                
+            }
+            requeteBart.close();
+            
+            ResultSet resultatLisa = requeteLisa.executeQuery();
+            while (resultatLisa.next()) {
+                scoreLisa = resultatLisa.getInt("score");
+                
+                
+            }
+            requeteLisa.close();
+
+//            connexion.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -112,6 +168,24 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         }
     }
 
+    public int getScoreHomer() {
+        return scoreHomer;
+    }
+
+    public int getScoreMarge() {
+        return scoreMarge;
+    }
+
+    public int getScoreBart() {
+        return scoreBart;
+    }
+
+    public int getScoreLisa() {
+        return scoreLisa;
+    }
+    
+    
+
     /**
      * @param args the command line arguments
      */
@@ -119,65 +193,31 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         FenetreDeJeu fenetre = new FenetreDeJeu();
         fenetre.setVisible(true);
                 //SCORE//
-        JFrame frame = new JFrame("Score");
-        frame.setSize(250, 250);
+            
+        JFrame frame = new JFrame("Panneau des scores");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4,1));
+        frame.setSize(120, 120);
         frame.setLocation(1600, 0);
-        frame.setLayout(null);
+        frame.setLayout(new FlowLayout());
+        JLabel scoredeHomer = new JLabel();
+        JLabel scoredeMarge = new JLabel();
+        JLabel scoredeBart = new JLabel();
+        JLabel scoredeLisa = new JLabel();
+        
+        scoredeHomer.setText("Score de Homer : "+String.valueOf(scoreHomer));
+        scoredeMarge.setText("Score de Marge : "+String.valueOf(scoreMarge));
+        scoredeBart.setText("Score de Bart : "+String.valueOf(scoreBart));
+        scoredeLisa.setText("Score de Lisa : "+String.valueOf(scoreLisa));
+        
+        panel.add(scoredeHomer);
+        panel.add(scoredeMarge);
+        panel.add(scoredeBart);
+        panel.add(scoredeLisa);
+        frame.getContentPane().add(panel);
         frame.setVisible(true);
-        JTextField scoredeHomer = new JTextField();
-        JTextField scoredeMarge = new JTextField();
-        JTextField scoredeBart = new JTextField();
-        JTextField scoredeLisa = new JTextField();
-        try {
-
-            Connection connexion = SingletonJDBC.getInstance().getConnection();
-
-            PreparedStatement requeteHomer = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Homer'");
-            PreparedStatement requeteMarge = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Marge'");
-            PreparedStatement requeteBart = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Bart'");
-            PreparedStatement requeteLisa = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Lisa'");
-            ResultSet resultatHomer = requeteHomer.executeQuery();
-
-            while (resultatHomer.next()) {
-                int scoreHomer = resultatHomer.getInt("score");
-                scoredeHomer.setText(String.valueOf(scoreHomer));
-                
-            }
-            requeteHomer.close();
-            
-            ResultSet resultatMarge = requeteMarge.executeQuery();
-            while (resultatMarge.next()) {
-                int scoreMarge = resultatMarge.getInt("score");
-                scoredeMarge.setText(String.valueOf(scoreMarge));
-                
-            }
-            requeteMarge.close();
-            
-            ResultSet resultatBart = requeteBart.executeQuery();
-            while (resultatBart.next()) {
-                int scoreBart = resultatBart.getInt("score");
-                scoredeBart.setText(String.valueOf(scoreBart));
-                
-            }
-            requeteBart.close();
-            
-            ResultSet resultatLisa = requeteLisa.executeQuery();
-            while (resultatLisa.next()) {
-                int scoreLisa = resultatLisa.getInt("score");
-                scoredeLisa.setText(String.valueOf(scoreLisa));
-                
-            }
-            requeteLisa.close();
-
-//            connexion.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        frame.add(scoredeHomer);
-        frame.add(scoredeMarge);
-        frame.add(scoredeBart);
-        frame.add(scoredeLisa);
+        
     }
 
 }
