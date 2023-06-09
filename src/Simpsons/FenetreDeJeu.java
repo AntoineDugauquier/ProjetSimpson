@@ -40,7 +40,10 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     static int scoreMarge;
     static int scoreBart;
     static int scoreLisa;
-    
+    static JLabel scoredeHomer = new JLabel();
+    static JLabel scoredeMarge = new JLabel();
+    static JLabel scoredeBart = new JLabel();
+    static JLabel scoredeLisa = new JLabel();
 
     public FenetreDeJeu() {
         // initialisation de la fenetre
@@ -64,7 +67,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         // Creation du Timer qui appelle this.actionPerformed() tous les 40 ms
         this.timer = new Timer(100, this);
         this.timer.start();
-      //SCORE//
+        //SCORE//
 
     }
 
@@ -94,38 +97,36 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
 
             while (resultatHomer.next()) {
                 scoreHomer = resultatHomer.getInt("score");
-                
-                System.out.println(String.valueOf(scoreHomer));
-                
+
             }
             requeteHomer.close();
-            
+
             ResultSet resultatMarge = requeteMarge.executeQuery();
             while (resultatMarge.next()) {
                 scoreMarge = resultatMarge.getInt("score");
-                
-                
+
             }
             requeteMarge.close();
-            
+
             ResultSet resultatBart = requeteBart.executeQuery();
             while (resultatBart.next()) {
                 scoreBart = resultatBart.getInt("score");
-                
-                
+
             }
             requeteBart.close();
-            
+
             ResultSet resultatLisa = requeteLisa.executeQuery();
             while (resultatLisa.next()) {
                 scoreLisa = resultatLisa.getInt("score");
-                
-                
+
             }
             requeteLisa.close();
+            scoredeHomer.setText("Score de Homer : " + String.valueOf(scoreHomer));
+            scoredeMarge.setText("Score de Marge : " + String.valueOf(scoreMarge));
+            scoredeBart.setText("Score de Bart : " + String.valueOf(scoreBart));
+            scoredeLisa.setText("Score de Lisa : " + String.valueOf(scoreLisa));
 
 //            connexion.close();
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -183,41 +184,31 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     public int getScoreLisa() {
         return scoreLisa;
     }
-    
-    
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        FenetreDeJeu fenetre = new FenetreDeJeu();
-        fenetre.setVisible(true);
-                //SCORE//
-            
+        //SCORE//
+
         JFrame frame = new JFrame("Panneau des scores");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4,1));
+        panel.setLayout(new GridLayout(4, 1));
         frame.setSize(120, 120);
         frame.setLocation(1600, 0);
         frame.setLayout(new FlowLayout());
-        JLabel scoredeHomer = new JLabel();
-        JLabel scoredeMarge = new JLabel();
-        JLabel scoredeBart = new JLabel();
-        JLabel scoredeLisa = new JLabel();
-        
-        scoredeHomer.setText("Score de Homer : "+String.valueOf(scoreHomer));
-        scoredeMarge.setText("Score de Marge : "+String.valueOf(scoreMarge));
-        scoredeBart.setText("Score de Bart : "+String.valueOf(scoreBart));
-        scoredeLisa.setText("Score de Lisa : "+String.valueOf(scoreLisa));
-        
+
         panel.add(scoredeHomer);
         panel.add(scoredeMarge);
         panel.add(scoredeBart);
         panel.add(scoredeLisa);
         frame.getContentPane().add(panel);
         frame.setVisible(true);
+        FenetreDeJeu fenetre = new FenetreDeJeu();
+        fenetre.setVisible(true);
         
+
     }
 
 }
