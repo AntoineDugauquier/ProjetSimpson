@@ -2,6 +2,7 @@ package Simpsons;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -23,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import outils.SingletonJDBC;
 
@@ -220,18 +222,25 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
 
     }
 
-    public static void fin() throws InterruptedException {
+    public static void fin(String id) throws InterruptedException {
         JFrame framefin = new JFrame();
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 1));
         framefin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         framefin.setResizable(false);
-        framefin.setSize(250, 250);
+        framefin.setSize(500, 500);
         framefin.setLocation(800, 480);
-        JLabel labelfin= new JLabel("La partie est terminée !");
-        labelfin.setBackground(Color.white);
+        JLabel labelfin= new JLabel("La partie est terminée !",SwingConstants.CENTER);
+        JLabel gagnant = new JLabel("Le gagnant / la gagnante est " + id, SwingConstants.CENTER);
+        Font font = new Font("Arial", Font.BOLD, 15);
+        labelfin.setFont(font);
+        gagnant.setFont(font);
         labelfin.setSize(250, 250);
-        labelfin.setLocation(800, 480);
+        labelfin.setLocation(760, 480);
         labelfin.setVisible(true);
-        framefin.add(labelfin);
+        panel.add(labelfin);
+        panel.add(gagnant);
+        framefin.getContentPane().add(panel);
         framefin.setVisible(true);
         jLabel1.wait();
     }

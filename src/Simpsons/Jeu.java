@@ -266,7 +266,7 @@ public class Jeu {
                         musiqueFond.setName("victorySound.mp3");
                         musiqueFond.play();
                         System.out.println("Victoire");
-                        FenetreDeJeu.fin();
+                        FenetreDeJeu.fin(avatar.identifiant);
 //                    this.finDePartie=true;
 
                     }
