@@ -1,5 +1,13 @@
 package Simpsons;
 
+import static Simpsons.FenetreDeJeu.scoreBart;
+import static Simpsons.FenetreDeJeu.scoreHomer;
+import static Simpsons.FenetreDeJeu.scoreLisa;
+import static Simpsons.FenetreDeJeu.scoreMarge;
+import static Simpsons.FenetreDeJeu.scoredeBart;
+import static Simpsons.FenetreDeJeu.scoredeHomer;
+import static Simpsons.FenetreDeJeu.scoredeLisa;
+import static Simpsons.FenetreDeJeu.scoredeMarge;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -180,13 +188,59 @@ public class Jeu {
                 sound.play();
                 avatar.porteObjet = false;
                 avatar.score++;
+                try {
+
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            PreparedStatement requeteHomer = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Homer'");
+            PreparedStatement requeteMarge = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Marge'");
+            PreparedStatement requeteBart = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Bart'");
+            PreparedStatement requeteLisa = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Lisa'");
+            ResultSet resultatHomer = requeteHomer.executeQuery();
+
+            while (resultatHomer.next()) {
+                scoreHomer = resultatHomer.getInt("score");
+
+            }
+            requeteHomer.close();
+
+            ResultSet resultatMarge = requeteMarge.executeQuery();
+            while (resultatMarge.next()) {
+                scoreMarge = resultatMarge.getInt("score");
+
+            }
+            requeteMarge.close();
+
+            ResultSet resultatBart = requeteBart.executeQuery();
+            while (resultatBart.next()) {
+                scoreBart = resultatBart.getInt("score");
+
+            }
+            requeteBart.close();
+
+            ResultSet resultatLisa = requeteLisa.executeQuery();
+            while (resultatLisa.next()) {
+                scoreLisa = resultatLisa.getInt("score");
+
+            }
+            requeteLisa.close();
+            scoredeHomer.setText("Score de Homer : " + String.valueOf(scoreHomer));
+            scoredeMarge.setText("Score de Marge : " + String.valueOf(scoreMarge));
+            scoredeBart.setText("Score de Bart : " + String.valueOf(scoreBart));
+            scoredeLisa.setText("Score de Lisa : " + String.valueOf(scoreLisa));
+
+//            connexion.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
                 base.modifiePosition();
                 while (!carte.accessible(base.coordX, base.coordY)) {
                     base.modifiePosition();
                 }
                 System.out.println("A pose un objet");
                 System.out.println(avatar.score);
-                if (avatar.score == 2) {
+
+                if (avatar.score == 3) {
                     musiqueFond.stop();
                     musiqueFond.setName("victorySound.mp3");
                     musiqueFond.play();
@@ -274,6 +328,7 @@ public class Jeu {
             this.detectCollisionBob(avatar, listeBoost.get(i));
             listeBoost.get(i).miseAJour();
         }
+        
     }
 
     public Avatar getAvatar() {
