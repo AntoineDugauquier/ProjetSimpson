@@ -48,6 +48,8 @@ public class FenetreDeJeuGUI extends javax.swing.JFrame implements ActionListene
             this.jeu.miseAJour();
         } catch (IOException ex) {
             Logger.getLogger(FenetreDeJeuGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FenetreDeJeuGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             this.jeu.rendu(contexte);

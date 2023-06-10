@@ -1,5 +1,6 @@
 package Simpsons;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -33,7 +34,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
 
     private BufferedImage framebuffer;
     private Graphics2D contexte;
-    private JLabel jLabel1;
+    static JLabel jLabel1;
     private Jeu jeu;
     private Timer timer;
     static int scoreHomer;
@@ -44,6 +45,8 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     static JLabel scoredeMarge = new JLabel();
     static JLabel scoredeBart = new JLabel();
     static JLabel scoredeLisa = new JLabel();
+    static JLabel titre = new JLabel();
+    
 
     public FenetreDeJeu() {
         // initialisation de la fenetre
@@ -77,6 +80,8 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         try {
             this.jeu.miseAJour();
         } catch (IOException ex) {
+            Logger.getLogger(FenetreDeJeu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
             Logger.getLogger(FenetreDeJeu.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
@@ -191,14 +196,19 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     public static void main(String[] args) {
         //SCORE//
 
-        JFrame frame = new JFrame("Panneau des scores");
+        JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 1));
-        frame.setSize(120, 120);
+        panel.setLayout(new GridLayout(6, 1));
+        frame.setSize(160, 145);
         frame.setLocation(1600, 0);
         frame.setLayout(new FlowLayout());
 
+        titre.setText("Panneau des scores");
+        JLabel espace = new JLabel();
+        panel.add(titre);
+        panel.add(espace);
         panel.add(scoredeHomer);
         panel.add(scoredeMarge);
         panel.add(scoredeBart);
@@ -207,8 +217,23 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         frame.setVisible(true);
         FenetreDeJeu fenetre = new FenetreDeJeu();
         fenetre.setVisible(true);
-        
 
+    }
+
+    public static void fin() throws InterruptedException {
+        JFrame framefin = new JFrame();
+        framefin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        framefin.setResizable(false);
+        framefin.setSize(250, 250);
+        framefin.setLocation(800, 480);
+        JLabel labelfin= new JLabel("La partie est terminée !");
+        labelfin.setBackground(Color.white);
+        labelfin.setSize(250, 250);
+        labelfin.setLocation(800, 480);
+        labelfin.setVisible(true);
+        framefin.add(labelfin);
+        framefin.setVisible(true);
+        jLabel1.wait();
     }
 
 }

@@ -4,6 +4,7 @@ import static Simpsons.FenetreDeJeu.scoreBart;
 import static Simpsons.FenetreDeJeu.scoreHomer;
 import static Simpsons.FenetreDeJeu.scoreLisa;
 import static Simpsons.FenetreDeJeu.scoreMarge;
+import static Simpsons.FenetreDeJeu.titre;
 import static Simpsons.FenetreDeJeu.scoredeBart;
 import static Simpsons.FenetreDeJeu.scoredeHomer;
 import static Simpsons.FenetreDeJeu.scoredeLisa;
@@ -25,6 +26,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import outils.OutilsJDBC;
 import outils.SingletonJDBC;
+import Simpsons.FenetreDeJeu;
 
 /**
  * Exemple de classe jeu
@@ -34,7 +36,7 @@ import outils.SingletonJDBC;
 public class Jeu {
 
     private Carte carte;
-    //private BufferedImage fond;
+    private BufferedImage fond;
 
     public Avatar avatar;
     public Boost boost, boost2;
@@ -49,6 +51,22 @@ public class Jeu {
     ArrayList<String> listeNom = new ArrayList();
 
     public Jeu() {
+        //Nettoyage de la base de données
+        try {
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            Statement statement = connexion.createStatement();
+
+            statement.executeUpdate("DELETE FROM Avatar;");
+            statement.executeUpdate("DELETE FROM Base;");
+            statement.executeUpdate("DELETE FROM Ressource;");
+
+            statement.close();
+//                        connexion.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
         this.carte = new Carte();
         for (int i = 0; i <= 1600; i += 32) {
             for (int j = 0; j < 960; j += 32) {
@@ -84,13 +102,13 @@ public class Jeu {
             ex.printStackTrace();
         }
 
-        String nom = JOptionPane.showInputDialog(null, " Choisir un pseudo parmi " + listeNom);
+        String nom = JOptionPane.showInputDialog(null, " Choisir un pseudo parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
         while (!this.listeNom.contains(nom)) {
-            nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom);
+            nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
         }
         if (nom != null) {
             this.listeNom.remove(nom);
-            System.out.println(" S a i s i e = " + nom);
+            System.out.println(" Saisie = " + nom);
         }
 
         this.avatar = new Avatar(nom);
@@ -170,7 +188,7 @@ public class Jeu {
         }
     }
 
-    public void detectCollisionBase(Avatar avatar, Base base) {
+    public void detectCollisionBase(Avatar avatar, Base base) throws InterruptedException {
         // Obtenez les dimensions des images
         int largeurPersonnage = avatar.sprite.getWidth();
         int taillePersonnage = avatar.sprite.getHeight();
@@ -189,85 +207,76 @@ public class Jeu {
                 avatar.porteObjet = false;
                 avatar.score++;
                 try {
+                    Connection connexion = SingletonJDBC.getInstance().getConnection();
 
-            Connection connexion = SingletonJDBC.getInstance().getConnection();
+                    Statement statement = connexion.createStatement();
 
-            PreparedStatement requeteHomer = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Homer'");
-            PreparedStatement requeteMarge = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Marge'");
-            PreparedStatement requeteBart = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Bart'");
-            PreparedStatement requeteLisa = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Lisa'");
-            ResultSet resultatHomer = requeteHomer.executeQuery();
+                    PreparedStatement requete = connexion.prepareStatement("UPDATE Avatar SET score = ? WHERE idavatar = ?");
+                    requete.setInt(1, avatar.score);
+                    requete.setString(2, avatar.identifiant);
+                    requete.executeQuery();
+                    PreparedStatement requetemaj = connexion.prepareStatement("SELECT score FROM Avatar");
+                    ResultSet resultat = requetemaj.executeQuery();
 
-            while (resultatHomer.next()) {
-                scoreHomer = resultatHomer.getInt("score");
-
-            }
-            requeteHomer.close();
-
-            ResultSet resultatMarge = requeteMarge.executeQuery();
-            while (resultatMarge.next()) {
-                scoreMarge = resultatMarge.getInt("score");
-
-            }
-            requeteMarge.close();
-
-            ResultSet resultatBart = requeteBart.executeQuery();
-            while (resultatBart.next()) {
-                scoreBart = resultatBart.getInt("score");
-
-            }
-            requeteBart.close();
-
-            ResultSet resultatLisa = requeteLisa.executeQuery();
-            while (resultatLisa.next()) {
-                scoreLisa = resultatLisa.getInt("score");
-
-            }
-            requeteLisa.close();
-            scoredeHomer.setText("Score de Homer : " + String.valueOf(scoreHomer));
-            scoredeMarge.setText("Score de Marge : " + String.valueOf(scoreMarge));
-            scoredeBart.setText("Score de Bart : " + String.valueOf(scoreBart));
-            scoredeLisa.setText("Score de Lisa : " + String.valueOf(scoreLisa));
-
-//            connexion.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-                base.modifiePosition();
-                while (!carte.accessible(base.coordX, base.coordY)) {
-                    base.modifiePosition();
-                }
-                System.out.println("A pose un objet");
-                System.out.println(avatar.score);
-
-                if (avatar.score == 3) {
-                    musiqueFond.stop();
-                    musiqueFond.setName("victorySound.mp3");
-                    musiqueFond.play();
-                    System.out.println("Victoire");
-                    try {
-                        Connection connexion = SingletonJDBC.getInstance().getConnection();
-
-                        Statement statement = connexion.createStatement();
-
-                        statement.executeUpdate("DELETE FROM Avatar;");
-                        statement.executeUpdate("DELETE FROM Base;");
-                        statement.executeUpdate("DELETE FROM Ressource;");
-
+                    while (resultat.next()) {
+                        int scoremaj = resultat.getInt("score");
+                        System.out.println("Màj BDD  " + scoremaj);
+                        }
                         statement.close();
-//                        connexion.close();
-
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
+                        requete.close();
+                        requetemaj.close();
+                    
+//            connexion.close();
+                
+                    }catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                    base.modifiePosition();
+                    while (!carte.accessible(base.coordX, base.coordY)) {
+                        base.modifiePosition();
                     }
+                    System.out.println("A pose un objet");
+                    System.out.println(avatar.score);
+
+                    //FIN DE PARTIE
+                    
+                    if (avatar.score == 2) {
+                        titre.setText("La partie est terminée !");
+                        if (avatar.identifiant.equals("Homer")) {
+                            System.out.println("Homer = " + avatar.score);
+                            scoredeHomer.setText("Score de Homer : " + String.valueOf(avatar.score));
+                            scoredeHomer.paintImmediately(scoredeHomer.getVisibleRect());
+                        }
+                        if (avatar.identifiant.equals("Marge")) {
+                            System.out.println("Marge = " + avatar.score);
+                            scoredeMarge.setText("Score de Marge : " + String.valueOf(avatar.score));
+                            scoredeMarge.paintImmediately(scoredeMarge.getVisibleRect());
+                        }
+                        if (avatar.identifiant.equals("Lisa")) {
+                            System.out.println("Lisa = " + avatar.score);
+                            scoredeLisa.setText("Score de Lisa : " + String.valueOf(avatar.score));
+                            scoredeLisa.paintImmediately(scoredeLisa.getVisibleRect());
+                        }
+                        if (avatar.identifiant.equals("Bart")) {
+                            System.out.println("Bart = " + avatar.score);
+                            scoredeBart.setText("Score de Bart : " + String.valueOf(avatar.score));
+                            scoredeBart.paintImmediately(scoredeBart.getVisibleRect());
+                        }
+                        musiqueFond.stop();
+                        musiqueFond.setName("victorySound.mp3");
+                        musiqueFond.play();
+                        System.out.println("Victoire");
+                        FenetreDeJeu.fin();
 //                    this.finDePartie=true;
 
+                    }
                 }
             }
         }
-    }
 
-    public void miseAJour() throws IOException {
+    
+
+    public void miseAJour() throws IOException, InterruptedException {
         if (!finDePartie) {
             if (!this.demHaut && !this.demBas) {
                 if (this.demGauche && !this.demDroite) {
@@ -328,7 +337,7 @@ public class Jeu {
             this.detectCollisionBob(avatar, listeBoost.get(i));
             listeBoost.get(i).miseAJour();
         }
-        
+
     }
 
     public Avatar getAvatar() {
