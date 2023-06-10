@@ -57,18 +57,18 @@ public class Avatar {
         this.compteurBoost = 0;
         if (this.identifiant.equals("Homer")) {
             this.coordx = 2;
-            this.coordy = 0;
+            this.coordy = 1;
         }
         if (this.identifiant.equals("Marge")) {
             this.coordx = 46;
-            this.coordy = 0;
+            this.coordy = 1;
         }
         if (this.identifiant.equals("Lisa")) {
             this.coordx = 46;
-            this.coordy = 29;
+            this.coordy = 28;
         }
         if (this.identifiant.equals("Bart")) {
-            this.coordx = 0;
+            this.coordx = 1;
             this.coordy = 27;
         }
         this.x = coordx * 32 + 9;
@@ -133,18 +133,18 @@ public class Avatar {
     public void retourDepart() {
         if (this.identifiant.equals("Homer")) {
             this.coordx = 2;
-            this.coordy = 0;
+            this.coordy = 1;
         }
         if (this.identifiant.equals("Marge")) {
             this.coordx = 46;
-            this.coordy = 0;
+            this.coordy = 1;
         }
         if (this.identifiant.equals("Lisa")) {
             this.coordx = 46;
-            this.coordy = 29;
+            this.coordy = 28;
         }
         if (this.identifiant.equals("Bart")) {
-            this.coordx = 0;
+            this.coordx = 1;
             this.coordy = 27;
         }
         x = coordx * 32 + 9;
