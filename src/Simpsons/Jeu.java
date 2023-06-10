@@ -83,8 +83,7 @@ public class Jeu {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
-        String nom = JOptionPane.showInputDialog(null, " Choisir un pseudo parmi " + listeNom);
+        String nom = JOptionPane.showInputDialog( null, " Choisir un pseudo parmi " + listeNom);
         while (!this.listeNom.contains(nom)) {
             nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom);
         }
@@ -272,14 +271,14 @@ public class Jeu {
             if (!this.demHaut && !this.demBas) {
                 if (this.demGauche && !this.demDroite) {
                     //direction demandée = gauche
-                    if (carte.accessible(avatar.coordx - (1 + avatar.compteurBoost), avatar.coordy)) {
+                    if (carte.accessible(avatar.coordx - 1, avatar.coordy)) {
                         avatar.setGauche(true);
 
                     }
                 }
                 if (!this.demGauche && this.demDroite) {
                     //direction demandée = droite
-                    if (carte.accessible(avatar.coordx + (1 + avatar.compteurBoost), avatar.coordy)) {
+                    if (carte.accessible(avatar.coordx + 1, avatar.coordy)) {
                         avatar.setDroite(true);
                     }
                 }
@@ -288,14 +287,14 @@ public class Jeu {
             if (!this.demGauche && !this.demDroite) {
                 if (this.demHaut && !this.demBas) {
                     //direction demandée = haut
-                    if (carte.accessible(avatar.coordx, avatar.coordy - (1 + avatar.compteurBoost))) {
+                    if (carte.accessible(avatar.coordx, avatar.coordy - 1)) {
                         avatar.setHaut(true);
 
                     }
                 }
                 if (!this.demHaut && this.demBas) {
                     //direction demandée = bas
-                    if (carte.accessible(avatar.coordx, avatar.coordy + (1 + avatar.compteurBoost))) {
+                    if (carte.accessible(avatar.coordx, avatar.coordy + 1)) {
                         avatar.setBas(true);
                     }
                 }
