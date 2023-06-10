@@ -30,12 +30,8 @@ public class Avatar {
     public BufferedImage sprite;
     protected int x, y;
     public boolean haut, bas, gauche, droite;
-    public double vitesse;
-//    public boolean boost;
-    public int compteurBoost;
     public int coordx, coordy;
     public boolean porteObjet;
-//    public Base base;
     public int score;
     public String identifiant;
 
@@ -49,12 +45,10 @@ public class Avatar {
         }
 
         this.identifiant = identifiant;
-        this.vitesse = 32;
         this.haut = false;
         this.bas = false;
         this.gauche = false;
         this.droite = false;
-        this.compteurBoost = 0;
         if (this.identifiant.equals("Homer")) {
             this.coordx = 2;
             this.coordy = 1;
@@ -202,9 +196,6 @@ public class Avatar {
         return y;
     }
 
-    public double getVitesse() {
-        return vitesse;
-    }
 
     public int getScore() {
         return score;
@@ -212,36 +203,24 @@ public class Avatar {
 
     public void miseAJour() throws IOException {
         if (this.gauche) {
-            coordx = coordx - (1 + compteurBoost);
+            coordx = coordx - 1;
             x = coordx * 32 + 9;
         }
 
         if (this.droite) {
-            coordx = coordx + (1 + compteurBoost);
+            coordx = coordx + 1;
             x = coordx * 32 + 9;
         }
 
         if (this.haut) {
-            coordy = coordy - (1 + compteurBoost);
+            coordy = coordy - 1;
             y = coordy * 32 + 8;
         }
 
         if (this.bas) {
-            coordy = coordy + (1 + compteurBoost);
+            coordy = coordy + 1;
             y = coordy * 32 + 8;
-        }
-//        if (coordx > 50-2) {
-//            coordx = 50-2;
-//        }
-//        if (coordx < 0+1) {
-//            coordx = 0+1;
-//        }
-//        if (coordy > 30-2) {
-//            coordy = 30-2;
-//        }
-//        if (coordy < 0+1) {
-//            coordy = 0+1;
-//        }
+        }     
         try {
 
             Connection connexion = SingletonJDBC.getInstance().getConnection();
@@ -256,7 +235,6 @@ public class Avatar {
             requete.executeQuery();
             statement.close();
             requete.close();
-//            connexion.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
