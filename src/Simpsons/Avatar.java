@@ -37,7 +37,6 @@ public class Avatar {
 
     public Avatar(String identifiant) {
         try {
-//            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite.png"));
             this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/" + identifiant + ".png"));
 
         } catch (IOException ex) {
@@ -99,7 +98,6 @@ public class Avatar {
 
             statement.close();
             requete.close();
-//            connexion.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -107,20 +105,10 @@ public class Avatar {
     }
 
     public void setGauche(boolean gauche) {
-//        try {
-////            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
-//        } catch (IOException ex) {
-//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         this.gauche = gauche;
     }
 
     public void setDroite(boolean droite) {
-//        try {
-////this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
-//        } catch (IOException ex) {
-//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         this.droite = droite;
     }
 
@@ -158,7 +146,6 @@ public class Avatar {
             requete.executeQuery();
             statement.close();
             requete.close();
-//            connexion.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -167,33 +154,15 @@ public class Avatar {
     }
 
     public void setHaut(boolean haut) {
-//        try {
-////            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
-//        } catch (IOException ex) {
-//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         this.haut = haut;
     }
 
     public void setBas(boolean bas) {
-//        try {
-//            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
-//        } catch (IOException ex) {
-//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         this.bas = bas;
     }
 
     public BufferedImage getSprite() {
         return sprite;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 
 
@@ -260,8 +229,6 @@ public class Avatar {
                 int x = resultat.getInt("x");
                 int y = resultat.getInt("y");
                 int score = resultat.getInt("score");
-                //System.out.println(pseudo + " = (" + latitude + "; " + longitude + ")");
-
                 
                 contexte.drawImage(ImageIO.read(getClass().getClassLoader().getResource("images/" + identifiant + ".png")), x,  y, null);
             }
