@@ -23,8 +23,6 @@ import javax.imageio.ImageIO;
  */
 public class Carte {
 
-    private int largeur = 12;
-    private int hauteur = 9;
     private int tailleTuile = 32;
     
     private int [][] decor = {
@@ -212,14 +210,8 @@ public class Carte {
                 if (valeur==22){
                     contexte.drawImage(tuileDangerFonce, i*32, j*32, null);
                 }
-            }
-       
-        }
-        
-        
-        
-        
-        
+            }       
+        }     
     }
     
     public boolean accessible (int x, int y){
