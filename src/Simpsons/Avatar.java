@@ -30,18 +30,13 @@ public class Avatar {
     public BufferedImage sprite;
     protected int x, y;
     public boolean haut, bas, gauche, droite;
-    public double vitesse;
-//    public boolean boost;
-    public int compteurBoost;
     public int coordx, coordy;
     public boolean porteObjet;
-//    public Base base;
     public int score;
     public String identifiant;
 
     public Avatar(String identifiant) {
         try {
-//            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/homer_droite.png"));
             this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/" + identifiant + ".png"));
 
         } catch (IOException ex) {
@@ -49,26 +44,24 @@ public class Avatar {
         }
 
         this.identifiant = identifiant;
-        this.vitesse = 32;
         this.haut = false;
         this.bas = false;
         this.gauche = false;
         this.droite = false;
-        this.compteurBoost = 0;
         if (this.identifiant.equals("Homer")) {
             this.coordx = 2;
-            this.coordy = 0;
+            this.coordy = 1;
         }
         if (this.identifiant.equals("Marge")) {
             this.coordx = 46;
-            this.coordy = 0;
+            this.coordy = 1;
         }
         if (this.identifiant.equals("Lisa")) {
             this.coordx = 46;
-            this.coordy = 29;
+            this.coordy = 28;
         }
         if (this.identifiant.equals("Bart")) {
-            this.coordx = 0;
+            this.coordx = 1;
             this.coordy = 27;
         }
         this.x = coordx * 32 + 9;
@@ -105,7 +98,6 @@ public class Avatar {
 
             statement.close();
             requete.close();
-//            connexion.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -113,38 +105,28 @@ public class Avatar {
     }
 
     public void setGauche(boolean gauche) {
-//        try {
-////            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
-//        } catch (IOException ex) {
-//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         this.gauche = gauche;
     }
 
     public void setDroite(boolean droite) {
-//        try {
-////this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
-//        } catch (IOException ex) {
-//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         this.droite = droite;
     }
 
     public void retourDepart() {
         if (this.identifiant.equals("Homer")) {
             this.coordx = 2;
-            this.coordy = 0;
+            this.coordy = 1;
         }
         if (this.identifiant.equals("Marge")) {
             this.coordx = 46;
-            this.coordy = 0;
+            this.coordy = 1;
         }
         if (this.identifiant.equals("Lisa")) {
             this.coordx = 46;
-            this.coordy = 29;
+            this.coordy = 28;
         }
         if (this.identifiant.equals("Bart")) {
-            this.coordx = 0;
+            this.coordx = 1;
             this.coordy = 27;
         }
         x = coordx * 32 + 9;
@@ -164,7 +146,6 @@ public class Avatar {
             requete.executeQuery();
             statement.close();
             requete.close();
-//            connexion.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -173,20 +154,10 @@ public class Avatar {
     }
 
     public void setHaut(boolean haut) {
-//        try {
-////            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
-//        } catch (IOException ex) {
-//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         this.haut = haut;
     }
 
     public void setBas(boolean bas) {
-//        try {
-//            this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/TahitiBob.png"));
-//        } catch (IOException ex) {
-//            Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         this.bas = bas;
     }
 
@@ -194,17 +165,6 @@ public class Avatar {
         return sprite;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public double getVitesse() {
-        return vitesse;
-    }
 
     public int getScore() {
         return score;
@@ -212,36 +172,24 @@ public class Avatar {
 
     public void miseAJour() throws IOException {
         if (this.gauche) {
-            coordx = coordx - (1 + compteurBoost);
+            coordx = coordx - 1;
             x = coordx * 32 + 9;
         }
 
         if (this.droite) {
-            coordx = coordx + (1 + compteurBoost);
+            coordx = coordx + 1;
             x = coordx * 32 + 9;
         }
 
         if (this.haut) {
-            coordy = coordy - (1 + compteurBoost);
+            coordy = coordy - 1;
             y = coordy * 32 + 8;
         }
 
         if (this.bas) {
-            coordy = coordy + (1 + compteurBoost);
+            coordy = coordy + 1;
             y = coordy * 32 + 8;
-        }
-//        if (coordx > 50-2) {
-//            coordx = 50-2;
-//        }
-//        if (coordx < 0+1) {
-//            coordx = 0+1;
-//        }
-//        if (coordy > 30-2) {
-//            coordy = 30-2;
-//        }
-//        if (coordy < 0+1) {
-//            coordy = 0+1;
-//        }
+        }     
         try {
 
             Connection connexion = SingletonJDBC.getInstance().getConnection();
@@ -256,7 +204,6 @@ public class Avatar {
             requete.executeQuery();
             statement.close();
             requete.close();
-//            connexion.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -282,8 +229,6 @@ public class Avatar {
                 int x = resultat.getInt("x");
                 int y = resultat.getInt("y");
                 int score = resultat.getInt("score");
-                //System.out.println(pseudo + " = (" + latitude + "; " + longitude + ")");
-
                 
                 contexte.drawImage(ImageIO.read(getClass().getClassLoader().getResource("images/" + identifiant + ".png")), x,  y, null);
             }

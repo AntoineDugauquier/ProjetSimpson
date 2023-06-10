@@ -52,21 +52,21 @@ public class Jeu {
 
     public Jeu() {
         //Nettoyage de la base de données
-        try {
-            Connection connexion = SingletonJDBC.getInstance().getConnection();
-
-            Statement statement = connexion.createStatement();
-
-            statement.executeUpdate("DELETE FROM Avatar;");
-            statement.executeUpdate("DELETE FROM Base;");
-            statement.executeUpdate("DELETE FROM Ressource;");
-
-            statement.close();
-//                        connexion.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            Connection connexion = SingletonJDBC.getInstance().getConnection();
+//
+//            Statement statement = connexion.createStatement();
+//
+//            statement.executeUpdate("DELETE FROM Avatar;");
+//            statement.executeUpdate("DELETE FROM Base;");
+//            statement.executeUpdate("DELETE FROM Ressource;");
+//
+//            statement.close();
+////                        connexion.close();
+//
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
         this.carte = new Carte();
         for (int i = 0; i <= 1600; i += 32) {
             for (int j = 0; j < 960; j += 32) {
@@ -150,13 +150,13 @@ public class Jeu {
                 && avatar.y < boost.y + tailleBonus
                 && avatar.y + taillePersonnage > boost.y) {
             // Collision détectée
-            if (!boost.attrape) {
+//            if (!boost.attrape) {
 //                System.out.println("boost !");//
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
                 sound.play();
                 avatar.miseAJour();
                 avatar.retourDepart();
-            }
+//            }
         }
     }
 
@@ -281,14 +281,14 @@ public class Jeu {
             if (!this.demHaut && !this.demBas) {
                 if (this.demGauche && !this.demDroite) {
                     //direction demandée = gauche
-                    if (carte.accessible(avatar.coordx - (1 + avatar.compteurBoost), avatar.coordy)) {
+                    if (carte.accessible(avatar.coordx - 1, avatar.coordy)) {
                         avatar.setGauche(true);
 
                     }
                 }
                 if (!this.demGauche && this.demDroite) {
                     //direction demandée = droite
-                    if (carte.accessible(avatar.coordx + (1 + avatar.compteurBoost), avatar.coordy)) {
+                    if (carte.accessible(avatar.coordx + 1, avatar.coordy)) {
                         avatar.setDroite(true);
                     }
                 }
@@ -297,14 +297,14 @@ public class Jeu {
             if (!this.demGauche && !this.demDroite) {
                 if (this.demHaut && !this.demBas) {
                     //direction demandée = haut
-                    if (carte.accessible(avatar.coordx, avatar.coordy - (1 + avatar.compteurBoost))) {
+                    if (carte.accessible(avatar.coordx, avatar.coordy - 1)) {
                         avatar.setHaut(true);
 
                     }
                 }
                 if (!this.demHaut && this.demBas) {
                     //direction demandée = bas
-                    if (carte.accessible(avatar.coordx, avatar.coordy + (1 + avatar.compteurBoost))) {
+                    if (carte.accessible(avatar.coordx, avatar.coordy + 1)) {
                         avatar.setBas(true);
                     }
                 }
