@@ -131,13 +131,13 @@ public class Jeu {
                 && avatar.y < boost.y + tailleBonus
                 && avatar.y + taillePersonnage > boost.y) {
             // Collision détectée
-            if (!boost.attrape) {
+//            if (!boost.attrape) {
 //                System.out.println("boost !");//
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
                 sound.play();
                 avatar.miseAJour();
                 avatar.retourDepart();
-            }
+//            }
         }
     }
 
