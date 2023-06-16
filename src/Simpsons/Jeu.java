@@ -46,7 +46,7 @@ public class Jeu {
     public SoundPlayer musiqueFond;
     public SoundPlayer musiqueBoost;
     public boolean demHaut, demBas, demGauche, demDroite;
-    public boolean finDePartie;
+    public int scoreFinDePartie;
     public Burns base;
     ArrayList<String> listeNom = new ArrayList();
 
@@ -75,7 +75,7 @@ public class Jeu {
         this.listeNom.add("Lisa");
         this.listeNom.add("Bart");
         this.listeNom.add("Homer");
-        this.listeNom.add("Marge");
+        this.listeNom.add("Marge");       
 
         try {
 
@@ -96,7 +96,6 @@ public class Jeu {
 
             statement.close();
             requete.close();
-//            connexion.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -134,6 +133,8 @@ public class Jeu {
         musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
         musiqueFond.play();
         musiqueBoost = new SoundPlayer("doh.mp3", false);
+        this.scoreFinDePartie=3;
+        
 
     }
 
@@ -152,10 +153,10 @@ public class Jeu {
             // Collision détectée
 //            if (!boost.attrape) {
 //                System.out.println("boost !");//
-                SoundPlayer sound = new SoundPlayer("doh.mp3", false);
-                sound.play();
-                avatar.miseAJour();
-                avatar.retourDepart();
+            SoundPlayer sound = new SoundPlayer("doh.mp3", false);
+            sound.play();
+            avatar.miseAJour();
+            avatar.retourDepart();
 //            }
         }
     }
@@ -221,73 +222,59 @@ public class Jeu {
                     while (resultat.next()) {
                         int scoremaj = resultat.getInt("score");
                         System.out.println("Màj BDD  " + scoremaj);
-                        }
-                        statement.close();
-                        requete.close();
-                        requetemaj.close();
-                    
-//            connexion.close();
-                
-                    }catch (SQLException ex) {
+                    }
+                    statement.close();
+                    requete.close();
+                    requetemaj.close();
+
+                } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+                base.modifiePosition();
+                while (!carte.accessible(base.coordX, base.coordY)) {
                     base.modifiePosition();
-                    while (!carte.accessible(base.coordX, base.coordY)) {
-                        base.modifiePosition();
-                    }
-                    System.out.println("A pose un objet");
-                    System.out.println(avatar.score);
+                }
+                System.out.println("A pose un objet");
+                System.out.println(avatar.score);
 
-                    //FIN DE PARTIE
-                    
-                    if (avatar.score == 2) {
-                        titre.setText("La partie est terminée !");
-                        if (avatar.identifiant.equals("Homer")) {
-                            System.out.println("Homer = " + avatar.score);
-                            scoredeHomer.setText("Score de Homer : " + String.valueOf(avatar.score));
-                            scoredeHomer.paintImmediately(scoredeHomer.getVisibleRect());
-                        }
-                        if (avatar.identifiant.equals("Marge")) {
-                            System.out.println("Marge = " + avatar.score);
-                            scoredeMarge.setText("Score de Marge : " + String.valueOf(avatar.score));
-                            scoredeMarge.paintImmediately(scoredeMarge.getVisibleRect());
-                        }
-                        if (avatar.identifiant.equals("Lisa")) {
-                            System.out.println("Lisa = " + avatar.score);
-                            scoredeLisa.setText("Score de Lisa : " + String.valueOf(avatar.score));
-                            scoredeLisa.paintImmediately(scoredeLisa.getVisibleRect());
-                        }
-                        if (avatar.identifiant.equals("Bart")) {
-                            System.out.println("Bart = " + avatar.score);
-                            scoredeBart.setText("Score de Bart : " + String.valueOf(avatar.score));
-                            scoredeBart.paintImmediately(scoredeBart.getVisibleRect());
-                        }
-                        musiqueFond.stop();
-                        musiqueFond.setName("victorySound.mp3");
-                        musiqueFond.play();
-                        System.out.println("Victoire");
-                        FenetreDeJeu.fin(avatar.identifiant);
-//                    this.finDePartie=true;
-
+                //FIN DE PARTIE
+                if (avatar.score == scoreFinDePartie) {
+                    titre.setText("La partie est terminée !");
+                    if (avatar.identifiant.equals("Homer")) {
+                        System.out.println("Homer = " + avatar.score);
+                        scoredeHomer.setText("Score de Homer : " + String.valueOf(avatar.score));
+                        scoredeHomer.paintImmediately(scoredeHomer.getVisibleRect());
                     }
+                    if (avatar.identifiant.equals("Marge")) {
+                        System.out.println("Marge = " + avatar.score);
+                        scoredeMarge.setText("Score de Marge : " + String.valueOf(avatar.score));
+                        scoredeMarge.paintImmediately(scoredeMarge.getVisibleRect());
+                    }
+                    if (avatar.identifiant.equals("Lisa")) {
+                        System.out.println("Lisa = " + avatar.score);
+                        scoredeLisa.setText("Score de Lisa : " + String.valueOf(avatar.score));
+                        scoredeLisa.paintImmediately(scoredeLisa.getVisibleRect());
+                    }
+                    if (avatar.identifiant.equals("Bart")) {
+                        System.out.println("Bart = " + avatar.score);
+                        scoredeBart.setText("Score de Bart : " + String.valueOf(avatar.score));
+                        scoredeBart.paintImmediately(scoredeBart.getVisibleRect());
+                    }            
+                                      
                 }
             }
         }
-
-    
+    }
 
     public void miseAJour() throws IOException, InterruptedException {
-        if (!finDePartie) {
             if (!this.demHaut && !this.demBas) {
                 if (this.demGauche && !this.demDroite) {
-                    //direction demandée = gauche
                     if (carte.accessible(avatar.coordx - 1, avatar.coordy)) {
                         avatar.setGauche(true);
 
                     }
                 }
                 if (!this.demGauche && this.demDroite) {
-                    //direction demandée = droite
                     if (carte.accessible(avatar.coordx + 1, avatar.coordy)) {
                         avatar.setDroite(true);
                     }
@@ -296,14 +283,12 @@ public class Jeu {
 
             if (!this.demGauche && !this.demDroite) {
                 if (this.demHaut && !this.demBas) {
-                    //direction demandée = haut
                     if (carte.accessible(avatar.coordx, avatar.coordy - 1)) {
                         avatar.setHaut(true);
 
                     }
                 }
                 if (!this.demHaut && this.demBas) {
-                    //direction demandée = bas
                     if (carte.accessible(avatar.coordx, avatar.coordy + 1)) {
                         avatar.setBas(true);
                     }
@@ -316,15 +301,10 @@ public class Jeu {
                 listeRessource.get(i).miseAJour();
                 this.detectCollisionRessource(avatar, listeRessource.get(i));
                 if (listeRessource.get(i).attrape) {
-//                listeRessource.remove(i);
                 }
             }
 
-//            this.detectCollisionBoost(avatar2, listeBoost.get(i));
-//                if (listeBoost.get(i).attrape) {
-//                    listeBoost.remove(i);
-//                }
-        }
+        
         avatar.setGauche(false);
         avatar.setDroite(false);
         avatar.setHaut(false);
@@ -360,8 +340,8 @@ public class Jeu {
         this.demBas = b;
     }
 
-    public void rendu(Graphics2D contexte) throws IOException {
-        if (!finDePartie) {
+    public void rendu(Graphics2D contexte) throws IOException, InterruptedException {              
+       
 
             this.carte.rendu(contexte);
 
@@ -375,6 +355,77 @@ public class Jeu {
             }
             this.avatar.rendu(contexte);
             this.base.rendu(contexte);
+        
+       
+           try {
+
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            PreparedStatement requeteHomer = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Homer'");
+            PreparedStatement requeteMarge = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Marge'");
+            PreparedStatement requeteBart = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Bart'");
+            PreparedStatement requeteLisa = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Lisa'");
+            ResultSet resultatHomer = requeteHomer.executeQuery();
+
+            while (resultatHomer.next()) {
+                scoreHomer = resultatHomer.getInt("score");
+                if(scoreHomer == scoreFinDePartie){
+                    musiqueFond.stop();
+                    musiqueFond.setName("victorySound.mp3");
+                    musiqueFond.play();
+                    System.out.println("Victoire");
+                    FenetreDeJeu.fin("Homer");                    
+                }
+                
+            }
+            requeteHomer.close();
+
+            ResultSet resultatMarge = requeteMarge.executeQuery();
+            while (resultatMarge.next()) {
+                scoreMarge = resultatMarge.getInt("score");
+                if(scoreHomer == this.scoreFinDePartie){
+                    musiqueFond.stop();
+                    musiqueFond.setName("victorySound.mp3");
+                    musiqueFond.play();
+                    System.out.println("Victoire");
+                    FenetreDeJeu.fin("Marge");
+                }
+
+            }
+            requeteMarge.close();
+
+            ResultSet resultatBart = requeteBart.executeQuery();
+            while (resultatBart.next()) {
+                scoreBart = resultatBart.getInt("score");
+                if(scoreHomer == scoreFinDePartie){
+                    musiqueFond.stop();
+                    musiqueFond.setName("victorySound.mp3");
+                    musiqueFond.play();
+                    System.out.println("Victoire");
+                    FenetreDeJeu.fin("Bart");
+                }
+
+            }
+            requeteBart.close();
+
+            ResultSet resultatLisa = requeteLisa.executeQuery();
+            while (resultatLisa.next()) {
+                scoreLisa = resultatLisa.getInt("score");
+                if(scoreHomer == scoreFinDePartie){
+                    musiqueFond.stop();
+                    musiqueFond.setName("victorySound.mp3");
+                    musiqueFond.play();
+                    System.out.println("Victoire");
+                    FenetreDeJeu.fin("Lisa");
+                }
+
+            }
+            requeteLisa.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
         }
     }
-}
+
+    
