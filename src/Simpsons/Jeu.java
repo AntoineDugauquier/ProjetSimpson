@@ -50,23 +50,7 @@ public class Jeu {
     public Burns base;
     ArrayList<String> listeNom = new ArrayList();
 
-    public Jeu() {
-        //Nettoyage de la base de données
-//        try {
-//            Connection connexion = SingletonJDBC.getInstance().getConnection();
-//
-//            Statement statement = connexion.createStatement();
-//
-//            statement.executeUpdate("DELETE FROM Avatar;");
-//            statement.executeUpdate("DELETE FROM Base;");
-//            statement.executeUpdate("DELETE FROM Ressource;");
-//
-//            statement.close();
-////                        connexion.close();
-//
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
+    public Jeu() throws SQLException {       
         this.carte = new Carte();
         for (int i = 0; i <= 1600; i += 32) {
             for (int j = 0; j < 960; j += 32) {
@@ -106,6 +90,25 @@ public class Jeu {
             nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
         }
         if (nom != null) {
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            Statement statement = connexion.createStatement();
+
+            PreparedStatement requete = connexion.prepareStatement("SELECT idavatar FROM Avatar");
+            ResultSet resultat = requete.executeQuery();
+
+            requete.executeQuery();
+
+            while (resultat.next()) {
+
+                String identifiant = resultat.getString("idavatar");
+                this.listeNom.remove(identifiant);
+            }
+
+            statement.close();
+            requete.close();
+            while (!this.listeNom.contains(nom)) {
+            nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
             this.listeNom.remove(nom);
             System.out.println(" Saisie = " + nom);
         }
@@ -133,8 +136,9 @@ public class Jeu {
         musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
         musiqueFond.play();
         musiqueBoost = new SoundPlayer("doh.mp3", false);
-        this.scoreFinDePartie = 3;
+        this.scoreFinDePartie = 2;
 
+    }
     }
 
     public void detectCollisionBob(Avatar avatar, Bob boost) throws IOException {
@@ -333,6 +337,7 @@ public class Jeu {
                     musiqueFond.play();
                     System.out.println("Victoire");
                     FenetreDeJeu.fin("Homer");
+                    connexion.close();
                 }
 
             }

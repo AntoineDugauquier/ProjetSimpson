@@ -19,20 +19,21 @@ public class ClearBDD {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-try {
-                        Connection connexion = SingletonJDBC.getInstance().getConnection();
+        try {
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
 
-                        Statement statement = connexion.createStatement();
+            Statement statement = connexion.createStatement();
 
-                        statement.executeUpdate("DELETE FROM Avatar;");
-                        statement.executeUpdate("DELETE FROM Base;");
-                        statement.executeUpdate("DELETE FROM Ressource;");
+            statement.executeUpdate("DELETE FROM Avatar;");
+            statement.executeUpdate("DELETE FROM Base;");
+            statement.executeUpdate("DELETE FROM Ressource;");
 
-                        statement.close();
+            statement.close();
 //                        connexion.close();
 
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }    }
-    
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

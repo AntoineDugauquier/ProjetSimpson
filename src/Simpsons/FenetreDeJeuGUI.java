@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -25,7 +26,7 @@ public class FenetreDeJeuGUI extends javax.swing.JFrame implements ActionListene
     /**
      * Creates new form NewJFrame
      */
-    public FenetreDeJeuGUI() {
+    public FenetreDeJeuGUI() throws SQLException {
         initComponents();
 
         // Creation du jeu
@@ -209,7 +210,11 @@ public class FenetreDeJeuGUI extends javax.swing.JFrame implements ActionListene
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FenetreDeJeuGUI().setVisible(true);
+                try {
+                    new FenetreDeJeuGUI().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FenetreDeJeuGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

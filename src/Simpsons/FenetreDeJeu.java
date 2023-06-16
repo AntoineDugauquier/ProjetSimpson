@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -48,9 +49,8 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     static JLabel scoredeBart = new JLabel();
     static JLabel scoredeLisa = new JLabel();
     static JLabel titre = new JLabel();
-    
 
-    public FenetreDeJeu() {
+    public FenetreDeJeu() throws SQLException {
         // initialisation de la fenetre
         this.setSize(1600, 960);
         this.setTitle("Simpson Partie");
@@ -197,7 +197,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         //SCORE//
 
         JFrame frame = new JFrame();
@@ -232,7 +232,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         framefin.setResizable(false);
         framefin.setSize(500, 500);
         framefin.setLocation(800, 480);
-        JLabel labelfin= new JLabel("La partie est terminée !",SwingConstants.CENTER);
+        JLabel labelfin = new JLabel("La partie est terminée !", SwingConstants.CENTER);
         JLabel gagnant = new JLabel("Le gagnant / la gagnante est " + id, SwingConstants.CENTER);
         Font font = new Font("Arial", Font.BOLD, 15);
         labelfin.setFont(font);
@@ -244,7 +244,23 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         panel.add(gagnant);
         framefin.getContentPane().add(panel);
         framefin.setVisible(true);
+        try {
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            Statement statement = connexion.createStatement();
+
+            statement.executeUpdate("DELETE FROM Avatar;");
+            statement.executeUpdate("DELETE FROM Base;");
+            statement.executeUpdate("DELETE FROM Ressource;");
+
+            statement.close();
+            connexion.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
         jLabel1.wait();
+        
     }
 
 }
