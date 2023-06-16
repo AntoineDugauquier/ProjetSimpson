@@ -39,15 +39,15 @@ public class Jeu {
     private BufferedImage fond;
 
     public Avatar avatar;
-    public Boost boost, boost2;
+    public Bob boost, boost2;
     public Ressource ressource, ressource2;
-    ArrayList<Boost> listeBoost = new ArrayList();
+    ArrayList<Bob> listeBoost = new ArrayList();
     ArrayList<Ressource> listeRessource = new ArrayList();
     public SoundPlayer musiqueFond;
     public SoundPlayer musiqueBoost;
     public boolean demHaut, demBas, demGauche, demDroite;
     public boolean finDePartie;
-    public Base base;
+    public Burns base;
     ArrayList<String> listeNom = new ArrayList();
 
     public Jeu() {
@@ -112,13 +112,13 @@ public class Jeu {
         }
 
         this.avatar = new Avatar(nom);
-        this.base = new Base();
+        this.base = new Burns();
 //        this.avatar2 = new Avatar("Bart.png");
         while (!carte.accessible(base.coordX, base.coordY)) {
             base.modifiePosition();
         }
-        this.boost = new Boost(true);
-        this.boost2 = new Boost(false);
+        this.boost = new Bob(true);
+        this.boost2 = new Bob(false);
         this.ressource = new Ressource(1);
         while (!carte.accessible(ressource.coordX, ressource.coordY)) {
             ressource.modifiePosition();
@@ -137,7 +137,7 @@ public class Jeu {
 
     }
 
-    public void detectCollisionBob(Avatar avatar, Boost boost) throws IOException {
+    public void detectCollisionBob(Avatar avatar, Bob boost) throws IOException {
         // Obtenez les dimensions des images
         int largeurPersonnage = avatar.sprite.getWidth();
         int taillePersonnage = avatar.sprite.getHeight();
@@ -188,7 +188,7 @@ public class Jeu {
         }
     }
 
-    public void detectCollisionBase(Avatar avatar, Base base) throws InterruptedException {
+    public void detectCollisionBase(Avatar avatar, Burns base) throws InterruptedException {
         // Obtenez les dimensions des images
         int largeurPersonnage = avatar.sprite.getWidth();
         int taillePersonnage = avatar.sprite.getHeight();

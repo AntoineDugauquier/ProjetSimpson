@@ -70,7 +70,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         this.contexte = this.framebuffer.createGraphics();
 
         // Creation du Timer qui appelle this.actionPerformed() tous les 40 ms
-        this.timer = new Timer(100, this);
+        this.timer = new Timer(500, this);
         this.timer.start();
         //SCORE//
 
