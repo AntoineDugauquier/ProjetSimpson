@@ -75,7 +75,7 @@ public class Jeu {
         this.listeNom.add("Lisa");
         this.listeNom.add("Bart");
         this.listeNom.add("Homer");
-        this.listeNom.add("Marge");       
+        this.listeNom.add("Marge");
 
         try {
 
@@ -133,8 +133,7 @@ public class Jeu {
         musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
         musiqueFond.play();
         musiqueBoost = new SoundPlayer("doh.mp3", false);
-        this.scoreFinDePartie=3;
-        
+        this.scoreFinDePartie = 3;
 
     }
 
@@ -234,7 +233,6 @@ public class Jeu {
                 while (!carte.accessible(base.coordX, base.coordY)) {
                     base.modifiePosition();
                 }
-                System.out.println("A pose un objet");
                 System.out.println(avatar.score);
 
                 //FIN DE PARTIE
@@ -259,52 +257,51 @@ public class Jeu {
                         System.out.println("Bart = " + avatar.score);
                         scoredeBart.setText("Score de Bart : " + String.valueOf(avatar.score));
                         scoredeBart.paintImmediately(scoredeBart.getVisibleRect());
-                    }            
-                                      
+                    }
+
                 }
             }
         }
     }
 
     public void miseAJour() throws IOException, InterruptedException {
-            if (!this.demHaut && !this.demBas) {
-                if (this.demGauche && !this.demDroite) {
-                    if (carte.accessible(avatar.coordx - 1, avatar.coordy)) {
-                        avatar.setGauche(true);
+        if (!this.demHaut && !this.demBas) {
+            if (this.demGauche && !this.demDroite) {
+                if (carte.accessible(avatar.coordx - 1, avatar.coordy)) {
+                    avatar.setGauche(true);
 
-                    }
-                }
-                if (!this.demGauche && this.demDroite) {
-                    if (carte.accessible(avatar.coordx + 1, avatar.coordy)) {
-                        avatar.setDroite(true);
-                    }
                 }
             }
-
-            if (!this.demGauche && !this.demDroite) {
-                if (this.demHaut && !this.demBas) {
-                    if (carte.accessible(avatar.coordx, avatar.coordy - 1)) {
-                        avatar.setHaut(true);
-
-                    }
-                }
-                if (!this.demHaut && this.demBas) {
-                    if (carte.accessible(avatar.coordx, avatar.coordy + 1)) {
-                        avatar.setBas(true);
-                    }
+            if (!this.demGauche && this.demDroite) {
+                if (carte.accessible(avatar.coordx + 1, avatar.coordy)) {
+                    avatar.setDroite(true);
                 }
             }
+        }
 
-            avatar.miseAJour();
+        if (!this.demGauche && !this.demDroite) {
+            if (this.demHaut && !this.demBas) {
+                if (carte.accessible(avatar.coordx, avatar.coordy - 1)) {
+                    avatar.setHaut(true);
 
-            for (int i = 0; i < listeRessource.size(); i++) {
-                listeRessource.get(i).miseAJour();
-                this.detectCollisionRessource(avatar, listeRessource.get(i));
-                if (listeRessource.get(i).attrape) {
                 }
             }
+            if (!this.demHaut && this.demBas) {
+                if (carte.accessible(avatar.coordx, avatar.coordy + 1)) {
+                    avatar.setBas(true);
+                }
+            }
+        }
 
-        
+        avatar.miseAJour();
+
+        for (int i = 0; i < listeRessource.size(); i++) {
+            listeRessource.get(i).miseAJour();
+            this.detectCollisionRessource(avatar, listeRessource.get(i));
+            if (listeRessource.get(i).attrape) {
+            }
+        }
+
         avatar.setGauche(false);
         avatar.setDroite(false);
         avatar.setHaut(false);
@@ -316,6 +313,75 @@ public class Jeu {
         for (int i = 0; i < listeBoost.size(); i++) {
             this.detectCollisionBob(avatar, listeBoost.get(i));
             listeBoost.get(i).miseAJour();
+        }
+
+        try {
+
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            PreparedStatement requeteHomer = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Homer'");
+            PreparedStatement requeteMarge = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Marge'");
+            PreparedStatement requeteBart = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Bart'");
+            PreparedStatement requeteLisa = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Lisa'");
+            ResultSet resultatHomer = requeteHomer.executeQuery();
+
+            while (resultatHomer.next()) {
+                scoreHomer = resultatHomer.getInt("score");
+                if (scoreHomer == scoreFinDePartie) {
+                    musiqueFond.stop();
+                    musiqueFond.setName("victorySound.mp3");
+                    musiqueFond.play();
+                    System.out.println("Victoire");
+                    FenetreDeJeu.fin("Homer");
+                }
+
+            }
+            requeteHomer.close();
+
+            ResultSet resultatMarge = requeteMarge.executeQuery();
+            while (resultatMarge.next()) {
+                scoreMarge = resultatMarge.getInt("score");
+                if (scoreMarge == this.scoreFinDePartie) {
+                    musiqueFond.stop();
+                    musiqueFond.setName("victorySound.mp3");
+                    musiqueFond.play();
+                    System.out.println("Victoire");
+                    System.out.println("Marge");
+                    FenetreDeJeu.fin("Marge");
+                }
+
+            }
+            requeteMarge.close();
+
+            ResultSet resultatBart = requeteBart.executeQuery();
+            while (resultatBart.next()) {
+                scoreBart = resultatBart.getInt("score");
+                if (scoreBart == scoreFinDePartie) {
+                    musiqueFond.stop();
+                    musiqueFond.setName("victorySound.mp3");
+                    musiqueFond.play();
+                    System.out.println("Victoire");
+                    FenetreDeJeu.fin("Bart");
+                }
+
+            }
+            requeteBart.close();
+
+            ResultSet resultatLisa = requeteLisa.executeQuery();
+            while (resultatLisa.next()) {
+                scoreLisa = resultatLisa.getInt("score");
+                if (scoreLisa == scoreFinDePartie) {
+                    musiqueFond.stop();
+                    musiqueFond.setName("victorySound.mp3");
+                    musiqueFond.play();
+                    System.out.println("Victoire");
+                    FenetreDeJeu.fin("Lisa");
+                }
+
+            }
+            requeteLisa.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
 
     }
@@ -340,92 +406,20 @@ public class Jeu {
         this.demBas = b;
     }
 
-    public void rendu(Graphics2D contexte) throws IOException, InterruptedException {              
-       
+    public void rendu(Graphics2D contexte) throws IOException, InterruptedException {
 
-            this.carte.rendu(contexte);
+        this.carte.rendu(contexte);
 
-            for (int i = 0; i < listeRessource.size(); i++) {
-                listeRessource.get(i).rendu(contexte);
+        for (int i = 0; i < listeRessource.size(); i++) {
+            listeRessource.get(i).rendu(contexte);
 
-            }
-            for (int i = 0; i < listeBoost.size(); i++) {
-                listeBoost.get(i).rendu(contexte);
-
-            }
-            this.avatar.rendu(contexte);
-            this.base.rendu(contexte);
-        
-       
-           try {
-
-            Connection connexion = SingletonJDBC.getInstance().getConnection();
-
-            PreparedStatement requeteHomer = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Homer'");
-            PreparedStatement requeteMarge = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Marge'");
-            PreparedStatement requeteBart = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Bart'");
-            PreparedStatement requeteLisa = connexion.prepareStatement("SELECT score FROM Avatar WHERE idavatar='Lisa'");
-            ResultSet resultatHomer = requeteHomer.executeQuery();
-
-            while (resultatHomer.next()) {
-                scoreHomer = resultatHomer.getInt("score");
-                if(scoreHomer == scoreFinDePartie){
-                    musiqueFond.stop();
-                    musiqueFond.setName("victorySound.mp3");
-                    musiqueFond.play();
-                    System.out.println("Victoire");
-                    FenetreDeJeu.fin("Homer");                    
-                }
-                
-            }
-            requeteHomer.close();
-
-            ResultSet resultatMarge = requeteMarge.executeQuery();
-            while (resultatMarge.next()) {
-                scoreMarge = resultatMarge.getInt("score");
-                if(scoreHomer == this.scoreFinDePartie){
-                    musiqueFond.stop();
-                    musiqueFond.setName("victorySound.mp3");
-                    musiqueFond.play();
-                    System.out.println("Victoire");
-                    FenetreDeJeu.fin("Marge");
-                }
-
-            }
-            requeteMarge.close();
-
-            ResultSet resultatBart = requeteBart.executeQuery();
-            while (resultatBart.next()) {
-                scoreBart = resultatBart.getInt("score");
-                if(scoreHomer == scoreFinDePartie){
-                    musiqueFond.stop();
-                    musiqueFond.setName("victorySound.mp3");
-                    musiqueFond.play();
-                    System.out.println("Victoire");
-                    FenetreDeJeu.fin("Bart");
-                }
-
-            }
-            requeteBart.close();
-
-            ResultSet resultatLisa = requeteLisa.executeQuery();
-            while (resultatLisa.next()) {
-                scoreLisa = resultatLisa.getInt("score");
-                if(scoreHomer == scoreFinDePartie){
-                    musiqueFond.stop();
-                    musiqueFond.setName("victorySound.mp3");
-                    musiqueFond.play();
-                    System.out.println("Victoire");
-                    FenetreDeJeu.fin("Lisa");
-                }
-
-            }
-            requeteLisa.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
-        
+        for (int i = 0; i < listeBoost.size(); i++) {
+            listeBoost.get(i).rendu(contexte);
+
         }
+        this.avatar.rendu(contexte);
+        this.base.rendu(contexte);
+
     }
-
-    
+}
