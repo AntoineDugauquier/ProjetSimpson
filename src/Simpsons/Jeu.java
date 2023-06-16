@@ -50,7 +50,7 @@ public class Jeu {
     public Burns base;
     ArrayList<String> listeNom = new ArrayList();
 
-    public Jeu() throws SQLException {       
+    public Jeu() throws SQLException {
         this.carte = new Carte();
         for (int i = 0; i <= 1600; i += 32) {
             for (int j = 0; j < 960; j += 32) {
@@ -87,6 +87,23 @@ public class Jeu {
 
         String nom = JOptionPane.showInputDialog(null, " Choisir un pseudo parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
         while (!this.listeNom.contains(nom)) {
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            Statement statement = connexion.createStatement();
+
+            PreparedStatement requete = connexion.prepareStatement("SELECT idavatar FROM Avatar");
+            ResultSet resultat = requete.executeQuery();
+
+            requete.executeQuery();
+
+            while (resultat.next()) {
+
+                String identifiant = resultat.getString("idavatar");
+                this.listeNom.remove(identifiant);
+            }
+
+            statement.close();
+            requete.close();
             nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
         }
         if (nom != null) {
@@ -108,38 +125,39 @@ public class Jeu {
             statement.close();
             requete.close();
             while (!this.listeNom.contains(nom)) {
-            nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
-            this.listeNom.remove(nom);
-            System.out.println(" Saisie = " + nom);
-        }
+                nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
+            }
+                this.listeNom.remove(nom);
+                System.out.println(" Saisie = " + nom);
+            }
 
-        this.avatar = new Avatar(nom);
-        this.base = new Burns();
+            this.avatar = new Avatar(nom);
+            this.base = new Burns();
 //        this.avatar2 = new Avatar("Bart.png");
-        while (!carte.accessible(base.coordX, base.coordY)) {
-            base.modifiePosition();
-        }
-        this.boost = new Bob(true);
-        this.boost2 = new Bob(false);
-        this.ressource = new Ressource(1);
-        while (!carte.accessible(ressource.coordX, ressource.coordY)) {
-            ressource.modifiePosition();
-        }
-        this.ressource2 = new Ressource(2);
-        while (!carte.accessible(ressource2.coordX, ressource2.coordY)) {
-            ressource.modifiePosition();
-        }
-        this.listeRessource.add(ressource);
-        this.listeRessource.add(ressource2);
-        this.listeBoost.add(boost);
-        this.listeBoost.add(boost2);
-        musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
-        musiqueFond.play();
-        musiqueBoost = new SoundPlayer("doh.mp3", false);
-        this.scoreFinDePartie = 2;
+            while (!carte.accessible(base.coordX, base.coordY)) {
+                base.modifiePosition();
+            }
+            this.boost = new Bob(true);
+            this.boost2 = new Bob(false);
+            this.ressource = new Ressource(1);
+            while (!carte.accessible(ressource.coordX, ressource.coordY)) {
+                ressource.modifiePosition();
+            }
+            this.ressource2 = new Ressource(2);
+            while (!carte.accessible(ressource2.coordX, ressource2.coordY)) {
+                ressource.modifiePosition();
+            }
+            this.listeRessource.add(ressource);
+            this.listeRessource.add(ressource2);
+            this.listeBoost.add(boost);
+            this.listeBoost.add(boost2);
+            musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
+            musiqueFond.play();
+            musiqueBoost = new SoundPlayer("doh.mp3", false);
+            this.scoreFinDePartie = 2;
 
-    }
-    }
+        }
+    
 
     public void detectCollisionBob(Avatar avatar, Bob boost) throws IOException {
         // Obtenez les dimensions des images
