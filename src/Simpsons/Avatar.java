@@ -73,7 +73,6 @@ public class Avatar {
 
             Statement statement = connexion.createStatement();
 
-//            statement.executeUpdate("DELETE FROM Avatar;");
             if (this.identifiant.equals("Homer")) {
                 statement.executeUpdate("INSERT INTO Avatar(x, y, score, idavatar) VALUES (x ,y,0,'Homer')");
             }
@@ -235,12 +234,10 @@ public class Avatar {
 
             statement.close();
             requete.close();
-//            connexion.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-//                contexte.drawImage(this.sprite, (int) x, (int) y, null);
 
     }
 

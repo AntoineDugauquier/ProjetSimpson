@@ -135,7 +135,6 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
             scoredeBart.setText("Score de Bart : " + String.valueOf(scoreBart));
             scoredeLisa.setText("Score de Lisa : " + String.valueOf(scoreLisa));
 
-//            connexion.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -243,7 +242,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         panel.add(labelfin);
         panel.add(gagnant);
         framefin.getContentPane().add(panel);
-        framefin.setVisible(true);
+        framefin.setVisible(true);       
         try {
             Connection connexion = SingletonJDBC.getInstance().getConnection();
 
@@ -260,7 +259,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
             ex.printStackTrace();
         }
         jLabel1.wait();
-        
+
     }
 
 }

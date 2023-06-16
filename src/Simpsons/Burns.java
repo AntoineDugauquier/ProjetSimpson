@@ -40,12 +40,6 @@ public class Burns {
 
     public BufferedImage sprite;
     public int coordX, coordY, x, y;
-    public int vitesse;
-    public int largeurMin;
-    public int hauteurMin;
-    public int largeurMax;
-    public int hauteurMax;
-    public boolean attrape;
     Random random = new Random();
 
     public Burns() {
@@ -64,7 +58,6 @@ public class Burns {
 
             Statement statement = connexion.createStatement();
 
-//            statement.executeUpdate("DELETE FROM Avatar;");
             statement.executeUpdate("INSERT INTO Base (x, y) VALUES (0 ,0)");
 
             PreparedStatement requete = connexion.prepareStatement("UPDATE Base SET x = ?, y = ? ");
@@ -76,29 +69,12 @@ public class Burns {
 
             statement.close();
             requete.close();
-//            connexion.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        this.largeurMin = 100;
-        this.hauteurMin = 100;
-        this.largeurMax = 1500;
-        this.hauteurMax = 900;
-        this.attrape = false;
     }
 
-    public BufferedImage getSprite() {
-        return sprite;
-    }
-
-    public void setSprite(BufferedImage sprite) {
-        this.sprite = sprite;
-    }
-
-    public int getX() {
-        return x;
-    }
 
     public void modifiePosition() {
         this.coordX = (random.nextInt(44 - 5) + 5);
@@ -127,25 +103,6 @@ public class Burns {
         }
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getVitesse() {
-        return vitesse;
-    }
-
-    public void setVitesse(int vitesse) {
-        this.vitesse = vitesse;
-    }
 
     public void miseAJour() throws IOException {
 

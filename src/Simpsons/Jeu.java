@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import outils.OutilsJDBC;
 import outils.SingletonJDBC;
 import Simpsons.FenetreDeJeu;
+import static Simpsons.FenetreDeJeu.jLabel1;
 
 /**
  * Exemple de classe jeu
@@ -39,9 +40,9 @@ public class Jeu {
     private BufferedImage fond;
 
     public Avatar avatar;
-    public Bob boost, boost2;
+    public Bob bob, bob2;
     public Ressource ressource, ressource2;
-    ArrayList<Bob> listeBoost = new ArrayList();
+    ArrayList<Bob> listeBob = new ArrayList();
     ArrayList<Ressource> listeRessource = new ArrayList();
     public SoundPlayer musiqueFond;
     public SoundPlayer musiqueBoost;
@@ -51,6 +52,9 @@ public class Jeu {
     ArrayList<String> listeNom = new ArrayList();
 
     public Jeu() throws SQLException {
+
+        this.scoreFinDePartie = 1;
+
         this.carte = new Carte();
         for (int i = 0; i <= 1600; i += 32) {
             for (int j = 0; j < 960; j += 32) {
@@ -127,37 +131,34 @@ public class Jeu {
             while (!this.listeNom.contains(nom)) {
                 nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
             }
-                this.listeNom.remove(nom);
-                System.out.println(" Saisie = " + nom);
-            }
-
-            this.avatar = new Avatar(nom);
-            this.base = new Burns();
-//        this.avatar2 = new Avatar("Bart.png");
-            while (!carte.accessible(base.coordX, base.coordY)) {
-                base.modifiePosition();
-            }
-            this.boost = new Bob(true);
-            this.boost2 = new Bob(false);
-            this.ressource = new Ressource(1);
-            while (!carte.accessible(ressource.coordX, ressource.coordY)) {
-                ressource.modifiePosition();
-            }
-            this.ressource2 = new Ressource(2);
-            while (!carte.accessible(ressource2.coordX, ressource2.coordY)) {
-                ressource.modifiePosition();
-            }
-            this.listeRessource.add(ressource);
-            this.listeRessource.add(ressource2);
-            this.listeBoost.add(boost);
-            this.listeBoost.add(boost2);
-            musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
-            musiqueFond.play();
-            musiqueBoost = new SoundPlayer("doh.mp3", false);
-            this.scoreFinDePartie = 2;
-
+            this.listeNom.remove(nom);
+            System.out.println(" Saisie = " + nom);
         }
-    
+
+        this.avatar = new Avatar(nom);
+        this.base = new Burns();
+        while (!carte.accessible(base.coordX, base.coordY)) {
+            base.modifiePosition();
+        }
+        this.bob = new Bob(true);
+        this.bob2 = new Bob(false);
+        this.ressource = new Ressource(1);
+        while (!carte.accessible(ressource.coordX, ressource.coordY)) {
+            ressource.modifiePosition();
+        }
+        this.ressource2 = new Ressource(2);
+        while (!carte.accessible(ressource2.coordX, ressource2.coordY)) {
+            ressource.modifiePosition();
+        }
+        this.listeRessource.add(ressource);
+        this.listeRessource.add(ressource2);
+        this.listeBob.add(bob);
+        this.listeBob.add(bob2);
+        musiqueFond = new SoundPlayer("simpson8Bits.mp3", true);
+        musiqueFond.play();
+        musiqueBoost = new SoundPlayer("doh.mp3", false);
+
+    }
 
     public void detectCollisionBob(Avatar avatar, Bob boost) throws IOException {
         // Obtenez les dimensions des images
@@ -332,9 +333,9 @@ public class Jeu {
         this.detectCollisionBase(avatar, base);
         this.base.miseAJour();
 
-        for (int i = 0; i < listeBoost.size(); i++) {
-            this.detectCollisionBob(avatar, listeBoost.get(i));
-            listeBoost.get(i).miseAJour();
+        for (int i = 0; i < listeBob.size(); i++) {
+            this.detectCollisionBob(avatar, listeBob.get(i));
+            listeBob.get(i).miseAJour();
         }
 
         try {
@@ -406,7 +407,6 @@ public class Jeu {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
     }
 
     public Avatar getAvatar() {
@@ -437,8 +437,8 @@ public class Jeu {
             listeRessource.get(i).rendu(contexte);
 
         }
-        for (int i = 0; i < listeBoost.size(); i++) {
-            listeBoost.get(i).rendu(contexte);
+        for (int i = 0; i < listeBob.size(); i++) {
+            listeBob.get(i).rendu(contexte);
 
         }
         this.avatar.rendu(contexte);
