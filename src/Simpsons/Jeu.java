@@ -53,7 +53,7 @@ public class Jeu {
 
     public Jeu() throws SQLException {
 
-        this.scoreFinDePartie = 1;
+        this.scoreFinDePartie = 3;
 
         this.carte = new Carte();
         for (int i = 0; i <= 1600; i += 32) {
