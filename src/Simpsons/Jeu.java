@@ -89,7 +89,7 @@ public class Jeu {
             ex.printStackTrace();
         }
 
-        String nom = JOptionPane.showInputDialog(null, " Choisir un pseudo parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
+        String nom = JOptionPane.showInputDialog(null, " Choisir un pseudo parmi " + listeNom, "SÃ©lection du personnage", JOptionPane.QUESTION_MESSAGE);
         while (!this.listeNom.contains(nom)) {
             Connection connexion = SingletonJDBC.getInstance().getConnection();
 
@@ -108,7 +108,7 @@ public class Jeu {
 
             statement.close();
             requete.close();
-            nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
+            nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "SÃ©lection du personnage", JOptionPane.QUESTION_MESSAGE);
         }
         if (nom != null) {
             Connection connexion = SingletonJDBC.getInstance().getConnection();
@@ -129,7 +129,7 @@ public class Jeu {
             statement.close();
             requete.close();
             while (!this.listeNom.contains(nom)) {
-                nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "Sélection du personnage", JOptionPane.QUESTION_MESSAGE);
+                nom = JOptionPane.showInputDialog(null, " Le pseudo n'est pas valide: \n Choisir parmi " + listeNom, "SÃ©lection du personnage", JOptionPane.QUESTION_MESSAGE);
             }
             this.listeNom.remove(nom);
             System.out.println(" Saisie = " + nom);
@@ -167,12 +167,12 @@ public class Jeu {
         int largeurBonus = boost.sprite.getWidth();
         int tailleBonus = boost.sprite.getHeight();
 
-        // Vérifiez si les rectangles des images se chevauchent
+        // VÃ©rifiez si les rectangles des images se chevauchent
         if (avatar.x < boost.x + largeurBonus
                 && avatar.x + largeurPersonnage > boost.x
                 && avatar.y < boost.y + tailleBonus
                 && avatar.y + taillePersonnage > boost.y) {
-            // Collision détectée
+            // Collision dÃ©tectÃ©e
 //            if (!boost.attrape) {
 //                System.out.println("boost !");//
             SoundPlayer sound = new SoundPlayer("doh.mp3", false);
@@ -180,6 +180,28 @@ public class Jeu {
             avatar.miseAJour();
             avatar.retourDepart();
 //            }
+        }
+    }
+    
+    public void detectRaccourciEntre(Avatar avatar) throws IOException {
+        // VÃ©rifiez si l'avatar est sur la porte raccourci entrÃ©e
+        if (avatar.coordx == 16 && avatar.coordy == 26) {
+            // Collision dÃ©tectÃ©e
+            avatar.miseAJour();
+            avatar.raccourciEntre();
+            
+            
+        }
+    }
+    
+    public void detectRaccourciSort(Avatar avatar) throws IOException {
+        // VÃ©rifiez si l'avatar est sur la porte raccourci sortie
+        if (avatar.coordx == 34 && avatar.coordy == 2) {
+            // Collision dÃ©tectÃ©e
+            avatar.miseAJour();
+            avatar.raccourciSort();
+            
+            
         }
     }
 
@@ -190,12 +212,12 @@ public class Jeu {
         int largeurBonus = ressource.sprite.getWidth();
         int tailleBonus = ressource.sprite.getHeight();
 
-        // Vérifiez si les rectangles des images se chevauchent
+        // VÃ©rifiez si les rectangles des images se chevauchent
         if (avatar.x < ressource.x + largeurBonus
                 && avatar.x + largeurPersonnage > ressource.x
                 && avatar.y < ressource.y + tailleBonus
                 && avatar.y + taillePersonnage > ressource.y) {
-            // Collision détectée
+            // Collision dÃ©tectÃ©e
             if (!avatar.porteObjet) {
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
                 sound.play();
@@ -218,12 +240,12 @@ public class Jeu {
         int largeurBonus = base.sprite.getWidth();
         int tailleBonus = base.sprite.getHeight();
 
-        // Vérifiez si les rectangles des images se chevauchent
+        // VÃ©rifiez si les rectangles des images se chevauchent
         if (avatar.x < base.x + largeurBonus
                 && avatar.x + largeurPersonnage > base.x
                 && avatar.y < base.y + tailleBonus
                 && avatar.y + taillePersonnage > base.y) {
-            // Collision détectée
+            // Collision dÃ©tectÃ©e
             if (avatar.porteObjet) {
                 SoundPlayer sound = new SoundPlayer("doh.mp3", false);
                 sound.play();
@@ -243,7 +265,7 @@ public class Jeu {
 
                     while (resultat.next()) {
                         int scoremaj = resultat.getInt("score");
-                        System.out.println("Màj BDD  " + scoremaj);
+                        System.out.println("MÃ j BDD  " + scoremaj);
                     }
                     statement.close();
                     requete.close();
@@ -260,7 +282,7 @@ public class Jeu {
 
                 //FIN DE PARTIE
                 if (avatar.score == scoreFinDePartie) {
-                    titre.setText("La partie est terminée !");
+                    titre.setText("La partie est terminÃ©e !");
                     if (avatar.identifiant.equals("Homer")) {
                         System.out.println("Homer = " + avatar.score);
                         scoredeHomer.setText("Score de Homer : " + String.valueOf(avatar.score));
@@ -292,7 +314,6 @@ public class Jeu {
             if (this.demGauche && !this.demDroite) {
                 if (carte.accessible(avatar.coordx - 1, avatar.coordy)) {
                     avatar.setGauche(true);
-
                 }
             }
             if (!this.demGauche && this.demDroite) {
@@ -337,6 +358,9 @@ public class Jeu {
             this.detectCollisionBob(avatar, listeBob.get(i));
             listeBob.get(i).miseAJour();
         }
+        
+        this.detectRaccourciEntre(avatar);
+        this.detectRaccourciSort(avatar);
 
         try {
 

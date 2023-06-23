@@ -30,6 +30,7 @@ public class Ressource {
     public int coordX, coordY, x, y;
     public boolean attrape;
     public int identifiant;
+    public boolean dansCachette;
     Random random = new Random();
 
     public Ressource(int identifiant) {
@@ -38,6 +39,7 @@ public class Ressource {
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.dansCachette = false;
         this.coordX = (random.nextInt(28 - 22) + 22);
         this.coordY = (random.nextInt(18 - 12) + 12);
         this.x = 32 * coordX + 4;
@@ -76,8 +78,31 @@ public class Ressource {
 
 
     public void modifiePosition() {
-        this.coordX = (random.nextInt(28 - 22) + 22);
-        this.coordY = (random.nextInt(18 - 12) + 12);
+        
+        this.dansCachette = !this.dansCachette;
+        
+        //Choix de zone d'apparition
+        //1 fois sur 2, on affiche au centre
+        if (this.dansCachette == false){
+            try {
+                this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Uranium.png"));
+            } catch (IOException ex) {
+                Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.coordX = (random.nextInt(28 - 22) + 22);
+            this.coordY = (random.nextInt(18 - 12) + 12);
+        }
+        //1 fois sur 2, on affiche dans la cachette
+        if (this.dansCachette == true){
+            try {
+                this.sprite = ImageIO.read(getClass().getClassLoader().getResource("images/Uranium-Red.png"));
+            } catch (IOException ex) {
+                Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.coordX = (random.nextInt(33 - 29) + 29);
+            this.coordY = (random.nextInt(4 - 1) + 1);
+        }
+        
         this.x = 32 * coordX + 4;
         this.y = 32 * coordY + 4;
         try {
@@ -99,6 +124,7 @@ public class Ressource {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        
     }
     
     public void miseAJour() throws IOException {

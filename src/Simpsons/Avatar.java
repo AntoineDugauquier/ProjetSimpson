@@ -48,6 +48,7 @@ public class Avatar {
         this.bas = false;
         this.gauche = false;
         this.droite = false;
+        
         if (this.identifiant.equals("Homer")) {
             this.coordx = 2;
             this.coordy = 1;
@@ -151,6 +152,94 @@ public class Avatar {
         }
 
     }
+    
+    public void raccourciEntre() {
+          this.coordx = 28;
+          this.coordy = 2;
+        
+//        if (this.gauche) {
+//            this.coordx = 29;
+//            this.coordy = 2;
+//        }
+//        if (this.droite) {
+//            this.coordx = 31;
+//            this.coordy = 2;
+//        }
+//        if (this.haut) {
+//            this.coordx = 30;
+//            this.coordy = 1;
+//        }
+//        if (this.bas) {
+//            this.coordx = 30;
+//            this.coordy = 3;
+//        }
+        x = coordx * 32 + 9;
+        y = coordy * 32 + 8;
+
+        try {
+
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            Statement statement = connexion.createStatement();
+
+            PreparedStatement requete = connexion.prepareStatement("UPDATE Avatar SET x = ?, y = ? , score = ? WHERE idavatar = ?");
+            requete.setInt(1, x);
+            requete.setInt(2, y);
+            requete.setInt(3, score);
+            requete.setString(4, identifiant);
+            requete.executeQuery();
+            statement.close();
+            requete.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+    
+    
+   public void raccourciSort() {
+          this.coordx = 33;
+          this.coordy = 26;
+//        if (this.gauche) {
+//            this.coordx = 29;
+//            this.coordy = 8;
+//        }
+//        if (this.droite) {
+//            this.coordx = 31;
+//            this.coordy = 8;
+//        }
+//        if (this.haut) {
+//            this.coordx = 30;
+//            this.coordy = 7;
+//        }
+//        if (this.bas) {
+//            this.coordx = 30;
+//            this.coordy = 9;
+//        }
+        x = coordx * 32 + 9;
+        y = coordy * 32 + 8;
+
+        try {
+
+            Connection connexion = SingletonJDBC.getInstance().getConnection();
+
+            Statement statement = connexion.createStatement();
+
+            PreparedStatement requete = connexion.prepareStatement("UPDATE Avatar SET x = ?, y = ? , score = ? WHERE idavatar = ?");
+            requete.setInt(1, x);
+            requete.setInt(2, y);
+            requete.setInt(3, score);
+            requete.setString(4, identifiant);
+            requete.executeQuery();
+            statement.close();
+            requete.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+    }
 
     public void setHaut(boolean haut) {
         this.haut = haut;
@@ -158,6 +247,7 @@ public class Avatar {
 
     public void setBas(boolean bas) {
         this.bas = bas;
+    
     }
 
     public BufferedImage getSprite() {
